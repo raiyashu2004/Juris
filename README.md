@@ -1,149 +1,103 @@
-# NyayaBot — Indian Legal AI Assistant
+<div align="center">
+  <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/scale.svg" width="80" height="80" alt="NyayaBot Logo" />
+  <h1>NyayaBot — Indian Legal AI Assistant</h1>
+  <p>A serverless, AI-powered legal research and drafting platform built for Indian advocates and law students. Powered by Gemini AI and Supabase.</p>
 
-A RAG-powered legal AI trained on the Indian Constitution, Supreme Court & High Court judgments, and central statutes. Built for lawyers, law students, and citizens seeking verified legal information.
+  <a href="#features">Features</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#architecture">Architecture</a>
+</div>
 
-## Features
+<br/>
 
-- **Legal Chat AI** — Ask questions about Indian law with cited answers (no hallucination)
-- **Case Finder** — Find past judgments relevant to your matter
-- **Document Analyser** — Upload contracts, FIRs, petitions, agreements — get risk flags, clause analysis, and relevant case law
-- **Petition Drafter** — AI-assisted drafting with proper legal format
-- **Multi-domain** — Constitutional, Criminal, Civil, Family, Property, Labor law
+## ⚖️ Overview
 
-## Tech Stack
+NyayaBot is a modern legal tech application designed to solve the biggest pain points in Indian legal practice: endless precedent searching, manual contract review, and formatting standard drafts. 
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 18 + Vite + Tailwind CSS |
-| Backend | FastAPI (Python 3.11+) |
-| Vector DB | pgvector (PostgreSQL) |
-| Embeddings | `multilingual-e5-large` via HuggingFace |
-| LLM | Anthropic Claude API |
-| PDF Parsing | PyMuPDF (fitz) |
-| Document OCR | Tesseract (for scanned docs) |
-| Auth | JWT + bcrypt |
-| Storage | AWS S3 / local filesystem |
+Unlike generic AI chat tools, NyayaBot strictly operates within the boundaries of Indian law (Constitution, IPC/BNS, CrPC, etc.) and emphasizes **anti-hallucination** by requiring verified citations for legal claims.
 
-## Project Structure
+## ✨ Features
 
-```
-nyayabot/
-├── frontend/               # React application
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/          # Page-level components
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── utils/          # API client, helpers
-│   │   └── styles/         # Global styles
-│   └── package.json
-├── backend/                # FastAPI application
-│   ├── main.py             # App entrypoint
-│   ├── routers/            # API route handlers
-│   │   ├── chat.py         # Legal chat endpoints
-│   │   ├── documents.py    # Document analyser endpoints
-│   │   ├── cases.py        # Case finder endpoints
-│   │   └── auth.py         # Auth endpoints
-│   ├── services/           # Business logic
-│   │   ├── rag.py          # RAG pipeline (core)
-│   │   ├── embeddings.py   # Embedding generation
-│   │   ├── llm.py          # LLM wrapper (Claude)
-│   │   ├── document_parser.py  # PDF/DOCX parsing
-│   │   └── case_retriever.py   # Case law search
-│   ├── models/             # SQLAlchemy + Pydantic models
-│   ├── utils/              # Shared utilities
-│   └── requirements.txt
-├── data/                   # Data ingestion scripts
-│   ├── ingest_constitution.py
-│   ├── ingest_judgments.py
-│   └── ingest_statutes.py
-└── docker-compose.yml
-```
+- **Smart Legal Research**: Ask complex legal questions and get plain-English answers backed by Indian case law and bare acts.
+- **Contract Risk Analysis**: Upload a lease or employment agreement. NyayaBot instantly flags one-sided clauses and missing protections before your client signs.
+- **Precedent Search**: Describe your case facts to pull up the most relevant Supreme Court and High Court judgments.
+- **Drafting Assistant**: Generate standard bail applications, writ petitions, and legal notices with proper Indian court formatting.
+- **In-App Legal Feed**: A live feed aggregating the latest legal news, supreme court judgments, and gazette notifications.
+- **Cloud Vault**: Securely upload, store, and manage your legal documents in the cloud.
 
-## Quick Start
+## 🛠 Tech Stack
 
-### 1. Clone and set up environment
+- **Frontend**: React 18, Vite, Vanilla CSS
+- **Backend & Auth**: Supabase (PostgreSQL, Authentication, Storage)
+- **AI Engine**: Google Gemini (gemini-2.5-flash)
+- **Icons**: Lucide React
+- **Deployment**: Vercel (Recommended)
 
+## 🚀 Quick Start (Local Development)
+
+### 1. Clone the repository
 ```bash
-git clone https://github.com/yourname/nyayabot
-cd nyayabot
+git clone https://github.com/raiyashu2004/nyayabot.git
+cd nyayabot/frontend
+```
 
-# Backend
-cd backend
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-# Frontend
-cd ../frontend
+### 2. Install dependencies
+```bash
 npm install
 ```
 
-### 2. Configure environment variables
-
-```bash
-# backend/.env
-ANTHROPIC_API_KEY=your_key_here
-DATABASE_URL=postgresql://user:pass@localhost:5432/nyayabot
-INDIANKANOON_API_KEY=your_key_here  # from indiankanoon.org/api/
-AWS_ACCESS_KEY_ID=...               # for document storage
-AWS_SECRET_ACCESS_KEY=...
-AWS_S3_BUCKET=nyayabot-documents
-JWT_SECRET=your_secret_here
+### 3. Configure Environment Variables
+Create a `.env.local` file in the `frontend` directory and add your keys:
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_GEMINI_API_KEY=your_google_gemini_api_key
 ```
 
-### 3. Set up the database
+### 4. Setup Supabase Infrastructure
+In your Supabase SQL Editor, run the following to create the required tables and storage buckets:
+```sql
+-- Create Document Metadata Table
+CREATE TABLE documents (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users not null,
+  file_name text not null,
+  file_type text not null,
+  file_size text not null,
+  storage_path text not null,
+  status text default 'Analyzed',
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
 
-```bash
-# Start PostgreSQL with pgvector
-docker-compose up -d db
+-- Enable Row Level Security
+ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users view own docs" ON documents FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users insert own docs" ON documents FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users delete own docs" ON documents FOR DELETE USING (auth.uid() = user_id);
 
-# Run migrations
-cd backend
-alembic upgrade head
+-- Create Storage Bucket
+INSERT INTO storage.buckets (id, name, public) VALUES ('nyayabot_docs', 'nyayabot_docs', false);
+
+-- Enable Storage Security Policies
+CREATE POLICY "Users upload files" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'nyayabot_docs' AND (auth.uid()::text = (storage.foldername(name))[1]));
+CREATE POLICY "Users read files" ON storage.objects FOR SELECT USING (bucket_id = 'nyayabot_docs' AND (auth.uid()::text = (storage.foldername(name))[1]));
+CREATE POLICY "Users delete files" ON storage.objects FOR DELETE USING (bucket_id = 'nyayabot_docs' AND (auth.uid()::text = (storage.foldername(name))[1]));
 ```
 
-### 4. Ingest legal data
-
+### 5. Run the Application
 ```bash
-cd data
-python ingest_constitution.py     # ~2 mins
-python ingest_statutes.py         # ~15 mins
-python ingest_judgments.py        # ~3-4 hours for full SC corpus
+npm run dev
 ```
+Open `http://localhost:5173` in your browser.
 
-### 5. Run the application
+## 🏗 Architecture Note
+This project was recently migrated from a heavy Python/FastAPI architecture to a fully **Serverless React application**. 
+- The `frontend/` folder contains the active, production-ready React application.
+- The `backend/` and `data/` folders contain legacy Python data ingestion and LangChain scripts, preserved for future custom RAG (Retrieval-Augmented Generation) pipeline implementations.
 
-```bash
-# Terminal 1 — Backend
-cd backend && uvicorn main:app --reload --port 8000
+## 📜 Disclaimer
+NyayaBot is an AI assistant intended for research and drafting assistance. It is **not a substitute for qualified legal counsel**. Always verify citations and legal advice with an advocate enrolled with the Bar Council of India before submitting documents to a court of law.
 
-# Terminal 2 — Frontend
-cd frontend && npm run dev
-```
-
-App runs at `http://localhost:5173`
-
-## Data Sources
-
-| Source | Data | How to get |
-|---|---|---|
-| India Code | Constitution + all central statutes | indiacode.nic.in (free) |
-| Indian Kanoon API | SC + HC judgments | indiankanoon.org/api (free tier available) |
-| SCC Online | Premium judgment database | Subscription (for production) |
-| eCourts | District court orders | ecourts.gov.in (free) |
-
-## Anti-Hallucination Design
-
-1. **RAG-only answers** — LLM only answers from retrieved chunks, never from parametric memory
-2. **Confidence threshold** — If best chunk similarity < 0.72, responds: "I could not find a reliable source for this in my database."
-3. **Mandatory citations** — System prompt requires citing article/section/case for every factual claim
-4. **Source display** — Every answer shows clickable source tags with full citation
-5. **Fallback disclaimer** — Out-of-scope queries redirect to qualified legal counsel
-
-## Deployment
-
-See `docs/deployment.md` for full AWS / Railway / Docker deployment guide.
-
-## License
-
-MIT — free to use, modify, and deploy.
+---
+*Built with ❤️ for the Indian Legal Community.*
