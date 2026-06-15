@@ -41,6 +41,8 @@ function AppContent() {
     return <LandingPage onNavigate={(v) => setAuthView(v)} />;
   }
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   // Authenticated: show dashboard with sidebar
   const renderPage = () => {
     switch (page) {
@@ -60,9 +62,9 @@ function AppContent() {
 
   return (
     <div className="app-layout">
-      <Sidebar activePage={page} onNavigate={setPage} />
+      <Sidebar activePage={page} onNavigate={(p) => { setPage(p); setIsMobileMenuOpen(false); }} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
       <div className="main-area">
-        <Header activePage={page} onNavigate={setPage} />
+        <Header activePage={page} onNavigate={setPage} setIsMobileMenuOpen={setIsMobileMenuOpen} />
         <main className="content-area">
           {renderPage()}
         </main>

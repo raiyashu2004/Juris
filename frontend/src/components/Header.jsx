@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Upload, Bell, Phone, ChevronDown, LogOut, User, Settings } from "lucide-react";
+import { ArrowLeft, Upload, Bell, Phone, ChevronDown, LogOut, User, Settings, Menu } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 const PAGE_TITLES = {
@@ -15,7 +15,7 @@ const PAGE_TITLES = {
   settings: { title: "Settings", subtitle: "Account & preferences" },
 };
 
-export default function Header({ activePage, onNavigate, docName }) {
+export default function Header({ activePage, onNavigate, docName, setIsMobileMenuOpen }) {
   const { user, logout, getInitials } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
   const pageInfo = PAGE_TITLES[activePage] || PAGE_TITLES.dashboard;
@@ -26,6 +26,12 @@ export default function Header({ activePage, onNavigate, docName }) {
   return (
     <header className="header-bar">
       <div className="header-left">
+        <button 
+          className="header-mobile-menu-btn" 
+          onClick={() => setIsMobileMenuOpen && setIsMobileMenuOpen(true)}
+        >
+          <Menu size={20} />
+        </button>
         {activePage !== "dashboard" && (
           <button
             className="header-back-btn"
