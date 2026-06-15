@@ -44,7 +44,8 @@ app = FastAPI(
 # Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://nyayabot.in"],
+    allow_origins=["http://localhost:5173", "https://nyayabot.in", "https://nyayabot-six.vercel.app"],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
