@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ArrowLeft, Upload, Bell, Phone, ChevronDown, LogOut, User, Settings, Menu } from "lucide-react";
+import { ArrowLeft, Upload, Bell, Phone, ChevronDown, LogOut, User, Settings, Menu, FileText, Scale, Bookmark } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import CallModal from "./CallModal";
 
 const PAGE_TITLES = {
   dashboard: { title: "Dashboard", subtitle: null },
@@ -18,6 +19,25 @@ const PAGE_TITLES = {
 export default function Header({ activePage, onNavigate, docName, setIsMobileMenuOpen }) {
   const { user, logout, getInitials } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showCallModal, setShowCallModal] = useState(false);
+
+  const [notifications, setNotifications] = useState([
+    { id: 1, title: "Document Analysis Complete: Lease Agreement", time: "10 mins ago", read: false, type: "blue", icon: <FileText size={16} /> },
+    { id: 2, title: "New SC Judgment matching 'Article 21'", time: "2 hours ago", read: false, type: "yellow", icon: <Scale size={16} /> },
+    { id: 3, title: "NDA_Draft.docx saved to My Documents", time: "1 day ago", read: true, type: "green", icon: <Bookmark size={16} /> }
+  ]);
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const markAsRead = (id) => {
+    setNotifications(notifications.map(n => n.id === id ? { ...n, read: true } : n));
+  };
+
+  const markAllRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, read: true })));
+  };
+
   const pageInfo = PAGE_TITLES[activePage] || PAGE_TITLES.dashboard;
 
   const displayName = user?.fullName || "User";
@@ -57,14 +77,61 @@ export default function Header({ activePage, onNavigate, docName, setIsMobileMen
           </button>
         )}
 
-        <button className="header-icon-btn" id="header-phone">
+        <button className="header-icon-btn" id="header-phone" onClick={() => setShowCallModal(true)}>
           <Phone size={17} />
         </button>
 
-        <button className="header-icon-btn" id="header-notifications">
-          <Bell size={17} />
-          <span className="notification-badge">2</span>
-        </button>
+        <div className="header-avatar-wrapper">
+          <button 
+            className="header-icon-btn" 
+            id="header-notifications"
+            onClick={() => { setShowNotifications(!showNotifications); setShowDropdown(false); }}
+          >
+            <Bell size={17} />
+            {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
+          </button>
+
+          {showNotifications && (
+            <>
+              <div className="dropdown-overlay" onClick={() => setShowNotifications(false)} />
+              <div className="notifications-dropdown">
+                <div className="notifications-header">
+                  <h3>Notifications</h3>
+                  {unreadCount > 0 && (
+                    <button className="notifications-mark-read" onClick={markAllRead}>
+                      Mark all as read
+                    </button>
+                  )}
+                </div>
+                {notifications.length > 0 ? (
+                  <div className="notifications-list">
+                    {notifications.map((notif) => (
+                      <div 
+                        key={notif.id} 
+                        className={`notification-item ${!notif.read ? 'unread' : ''}`}
+                        onClick={() => markAsRead(notif.id)}
+                      >
+                        <div className={`notification-icon ${notif.type}`}>
+                          {notif.icon}
+                        </div>
+                        <div className="notification-content">
+                          <p className="notification-title">{notif.title}</p>
+                          <p className="notification-time">{notif.time}</p>
+                        </div>
+                        {!notif.read && <div className="notification-unread-dot" />}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="notifications-empty">
+                    <Bell size={32} color="#CBD5E1" style={{ margin: "0 auto 12px" }} />
+                    You have no new notifications
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
 
         {/* User Avatar Dropdown */}
         <div className="header-avatar-wrapper">
@@ -108,6 +175,8 @@ export default function Header({ activePage, onNavigate, docName, setIsMobileMen
           )}
         </div>
       </div>
+      
+      {showCallModal && <CallModal onClose={() => setShowCallModal(false)} />}
     </header>
   );
 }

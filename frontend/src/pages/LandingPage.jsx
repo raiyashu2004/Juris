@@ -41,10 +41,12 @@ export default function LandingPage({ onNavigate }) {
         <div className="landing-nav-inner">
           <div className="landing-nav-brand">
             <div className="landing-nav-logo">
-              <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 28, height: 28, borderRadius: 6, marginRight: 8 }} />
-              <span className="landing-nav-name">JurisAI</span>
+              <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 28, height: 28, borderRadius: 6 }} />
             </div>
-            <span className="landing-nav-tag">AI Legal Assistant</span>
+            <div style={{ marginLeft: 8, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <span className="landing-nav-name" style={{ lineHeight: 1 }}>JurisAI</span>
+              <span className="landing-nav-tag" style={{ lineHeight: 1, marginTop: 4 }}>AI Legal Assistant</span>
+            </div>
           </div>
           <div className="landing-nav-links">
             <a href="#features">Features</a>
@@ -222,9 +224,11 @@ export default function LandingPage({ onNavigate }) {
           <div className="landing-footer-brand">
             <div className="landing-nav-brand">
               <div className="landing-nav-logo">
-                <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 28, height: 28, borderRadius: 6, marginRight: 8 }} />
+                <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 28, height: 28, borderRadius: 6 }} />
               </div>
-              <span className="landing-nav-name">JurisAI</span>
+              <div style={{ marginLeft: 8, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <span className="landing-nav-name" style={{ lineHeight: 1 }}>JurisAI</span>
+              </div>
             </div>
             <p>AI-powered legal research assistant for Indian law. Providing verified, cited legal information to advocates, law students, and citizens.</p>
           </div>
