@@ -91,8 +91,14 @@ async def generic_call(req: GenericChatRequest):
         HumanMessage(content=req.user_message)
     ]
     
-    response = await llm.ainvoke(messages)
-    return {"text": response.content}
+    try:
+        response = await llm.ainvoke(messages)
+        return {"text": response.content}
+    except Exception as e:
+        import traceback
+        err_str = f"Error: {str(e)}\n{traceback.format_exc()}"
+        print(err_str)
+        return {"text": err_str}
 
 @router.post("/ask", response_model=ChatResponse)
 async def ask(req: ChatRequest, user=Depends(get_current_user)):
