@@ -126,36 +126,47 @@ export function extractJSON(raw) {
   throw new Error("Could not parse response as JSON");
 }
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:10000";
+
 export async function callGemini(systemPrompt, userMessage, onChunk) {
-  const prompt = `${systemPrompt}\n\nUser: ${userMessage}`;
   if (onChunk) {
-    const res = await fetch(`${GEMINI_BASE}:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { temperature: 0.1, maxOutputTokens: 4000 } }),
+    const res = await fetch(`${BACKEND_URL}/api/chat/generic-stream`, {
+      method: "POST", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ system_prompt: systemPrompt, user_message: userMessage }),
     });
-    if (!res.ok) throw new Error(`Gemini API error ${res.status}`);
-    const reader = res.body.getReader(); const dec = new TextDecoder(); let full = "";
+    
+    if (!res.ok) throw new Error(`Backend API error ${res.status}`);
+    
+    const reader = res.body.getReader(); 
+    const dec = new TextDecoder(); 
+    let full = "";
+    
     while (true) {
-      const { done, value } = await reader.read(); if (done) break;
-      for (const line of dec.decode(value).split("\n")) {
-        if (!line.startsWith("data: ")) continue;
-        try { const p = JSON.parse(line.slice(6)); const t = p.candidates?.[0]?.content?.parts?.[0]?.text; if (t) { full += t; onChunk(full); } } catch {}
+      const { done, value } = await reader.read(); 
+      if (done) break;
+      
+      const chunkStr = dec.decode(value);
+      for (const line of chunkStr.split("\n")) {
+        if (line.startsWith("data: ")) {
+          full += line.substring(6);
+          onChunk(full);
+        }
       }
     }
     return full;
   } else {
-    const res = await fetch(`${GEMINI_BASE}:generateContent?key=${GEMINI_API_KEY}`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { temperature: 0.1, maxOutputTokens: 4000 } }),
+    // Non-streaming fallback
+    const res = await fetch(`${BACKEND_URL}/api/chat/generic-stream`, {
+      method: "POST", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ system_prompt: systemPrompt, user_message: userMessage }),
     });
-    if (!res.ok) {
-      if (res.status === 429) throw new Error("AI Rate Limit Exceeded (Free Tier limits you to 15 requests/minute). Please wait 60 seconds and try again.");
-      throw new Error(`Gemini API error ${res.status}`);
-    }
-    const data = await res.json(); return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    if (!res.ok) throw new Error(`Backend API error ${res.status}`);
+    const text = await res.text();
+    return text.split("\n").filter(l => l.startsWith("data: ")).map(l => l.substring(6)).join("");
   }
 }
-
 export function extractCitations(text) {
   const tags = [];
   (text.match(/Article\s+\d+[A-Z]?(?:\([a-z0-9]+\))?/gi)||[]).slice(0,3).forEach(a=>tags.push({label:a,type:"constitution"}));

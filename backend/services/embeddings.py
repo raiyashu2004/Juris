@@ -1,60 +1,53 @@
 """
-Embedding Service — multilingual-e5-large for Indian legal text.
+Embedding Service — Google Generative AI Embeddings for Indian legal text.
 
-Why multilingual-e5-large:
-- Understands Hindi + English legal terms
-- Strong semantic similarity for legal domain
-- 1024-dim embeddings stored in pgvector
+Why Google Embeddings:
+- Understands massive context windows
+- Zero RAM overhead (API-based)
+- 768-dim embeddings stored in pgvector
 """
 
-from sentence_transformers import SentenceTransformer
+import os
 from typing import ClassVar, Optional
-import asyncio
-
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 class EmbeddingService:
-    _model: ClassVar[Optional[SentenceTransformer]] = None
-    MODEL_NAME = "intfloat/multilingual-e5-large"
-    DIMENSION = 1024
+    _model: ClassVar[Optional[GoogleGenerativeAIEmbeddings]] = None
+    MODEL_NAME = "models/embedding-001"
+    DIMENSION = 768
 
     @classmethod
     async def initialize(cls):
-        """Load model on startup (run once)."""
-        loop = asyncio.get_event_loop()
-        cls._model = await loop.run_in_executor(
-            None,
-            lambda: SentenceTransformer(cls.MODEL_NAME)
+        """Initialize the Google Embedding client."""
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            print("WARNING: GEMINI_API_KEY not found. Embeddings will fail.")
+            
+        cls._model = GoogleGenerativeAIEmbeddings(
+            model=cls.MODEL_NAME,
+            google_api_key=api_key,
         )
 
     async def embed(self, text: str) -> list[float]:
         """Embed a single query string."""
         if not self._model:
             await self.initialize()
-        loop = asyncio.get_event_loop()
-        # e5 models need "query: " prefix for queries
-        vector = await loop.run_in_executor(
-            None,
-            lambda: self._model.encode(f"query: {text}", normalize_embeddings=True).tolist()
-        )
+        
+        # embed_query automatically formats for search queries
+        vector = await self._model.aembed_query(text)
         return vector
 
     async def embed_batch(self, texts: list[str], is_passage: bool = True) -> list[list[float]]:
         """
         Embed a batch of document chunks for ingestion.
-        Passages use "passage: " prefix; queries use "query: ".
         """
         if not self._model:
             await self.initialize()
-        prefix = "passage: " if is_passage else "query: "
-        prefixed = [f"{prefix}{t}" for t in texts]
-        loop = asyncio.get_event_loop()
-        vectors = await loop.run_in_executor(
-            None,
-            lambda: self._model.encode(
-                prefixed,
-                normalize_embeddings=True,
-                batch_size=32,
-                show_progress_bar=True,
-            ).tolist()
-        )
+            
+        if is_passage:
+            vectors = await self._model.aembed_documents(texts)
+        else:
+            # Although rare to batch queries, we support it
+            vectors = [await self._model.aembed_query(t) for t in texts]
+            
         return vectors

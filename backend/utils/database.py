@@ -33,6 +33,6 @@ async def init_db():
                 year INTEGER,
                 content TEXT NOT NULL,
                 chunk_index INTEGER DEFAULT 0,
-                embedding vector(1024)
+                embedding vector(768)
             );
         """)

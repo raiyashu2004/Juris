@@ -40,6 +40,7 @@ class LLMService:
         system: str,
         user: str,
         max_tokens: int = 1500,
+        temperature: float = 0.1,
     ) -> AsyncGenerator[str, None]:
         async with httpx.AsyncClient(timeout=60.0) as client:
             async with client.stream(
