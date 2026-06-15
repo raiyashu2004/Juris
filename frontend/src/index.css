@@ -2984,3 +2984,13 @@ body {
 .icon-btn-hover:hover {
   background: #F1F5F9 !important;
 }
+
+/* =========================================================
+   PASSWORD GLITCH FIX
+   ========================================================= */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+}
