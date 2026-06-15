@@ -13,10 +13,8 @@ export default function CaseFinder() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
-  // Modal State for AI Case Brief
+  // Modal State for In-App Viewer
   const [activeCase, setActiveCase] = useState(null);
-  const [caseBrief, setCaseBrief] = useState("");
-  const [briefLoading, setBriefLoading] = useState(false);
 
   const search = async () => {
     if (!q.trim() || busy) return;
@@ -41,27 +39,7 @@ export default function CaseFinder() {
     setBusy(false);
   };
 
-  const handleReadBrief = async (c) => {
-    setActiveCase(c);
-    setBriefLoading(true);
-    setCaseBrief("");
-    try {
-      const prompt = `You are a Senior Indian Advocate. Provide a comprehensive, structured case brief for the Indian case: ${c.name} (${c.citation || 'Citation unknown'}). 
-      Format in Markdown with the following headers:
-      ## 1. Facts of the Case
-      ## 2. Primary Legal Issues
-      ## 3. Ratio Decidendi (The Rule of Law)
-      ## 4. Final Judgment
-      
-      If you do not know the case or are not confident, state clearly that you cannot provide a reliable brief instead of hallucinating.`;
-      
-      const response = await callGemini(prompt, "");
-      setCaseBrief(response);
-    } catch (e) {
-      setCaseBrief("Failed to generate case brief: " + e.message);
-    }
-    setBriefLoading(false);
-  };
+
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", flexDirection: "column", gap: 18 }}>
@@ -170,20 +148,20 @@ export default function CaseFinder() {
 
               <div style={{ display: "flex", gap: 10, marginTop: 14, paddingTop: 14, borderTop: "1px solid #F1F5F9" }}>
                 <button 
-                  onClick={() => handleReadBrief(c)}
+                  onClick={() => setActiveCase(c)}
                   className="btn-primary"
                   style={{ flex: 1, justifyContent: "center", fontSize: 13, padding: "8px 0", cursor: "pointer" }}
                 >
-                  <Sparkles size={14} color="#FFF" /> AI Case Brief
+                  <Scale size={14} color="#FFF" /> In-App Viewer (Kanoon)
                 </button>
                 <a 
-                  href={`https://indiankanoon.org/search/?formInput=${encodeURIComponent(c.name)}`} 
+                  href={`https://scholar.google.com/scholar?q=${encodeURIComponent(c.name)}`} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="btn-ghost"
                   style={{ flex: 1, justifyContent: "center", fontSize: 13, padding: "8px 0", textDecoration: "none" }}
                 >
-                  <Scale size={14} /> Read Full Text
+                  <Search size={14} /> Google Scholar
                 </a>
               </div>
             </div>
@@ -204,33 +182,28 @@ export default function CaseFinder() {
         </div>
       )}
 
-      {/* Case Brief Modal */}
+      {/* Zero-Cost Iframe Modal */}
       {activeCase && (
         <div className="article-modal-overlay" onClick={() => setActiveCase(null)}>
-          <div className="article-modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="article-modal-content" style={{ maxWidth: 1000, height: '85vh', display: 'flex', flexDirection: 'column' }} onClick={(e) => e.stopPropagation()}>
             <button className="article-modal-close" onClick={() => setActiveCase(null)}>
               <X size={20} />
             </button>
-            <div className="article-modal-header">
+            <div className="article-modal-header" style={{ paddingBottom: 15 }}>
               <h2>{activeCase.name}</h2>
               <p className="article-modal-meta">
                 <Scale size={14} /> {activeCase.citation || "Citation"}
                 <span style={{ margin: "0 8px", color: "#CBD5E1" }}>|</span>
-                <Sparkles size={14} color="#D4AF37" /> AI Generated Brief
+                Indian Kanoon Viewer (0 API Credits)
               </p>
             </div>
             
-            <div className="article-modal-body">
-              {briefLoading ? (
-                <div className="article-loading">
-                  <div className="spinner"></div>
-                  <p>Generating detailed case brief...</p>
-                </div>
-              ) : (
-                <ReactMarkdown className="markdown-content">
-                  {caseBrief}
-                </ReactMarkdown>
-              )}
+            <div className="article-modal-body" style={{ flex: 1, padding: 0, overflow: 'hidden', borderRadius: '0 0 14px 14px' }}>
+              <iframe 
+                src={`https://indiankanoon.org/search/?formInput=${encodeURIComponent(activeCase.name)}`} 
+                style={{ width: '100%', height: '100%', border: 'none' }}
+                title="Indian Kanoon Viewer"
+              />
             </div>
           </div>
         </div>
