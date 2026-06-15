@@ -3292,3 +3292,27 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     text-align: left !important;
   }
 }
+
+/* =========================================================
+   GLOBAL MOBILE FIXES (100dvh & Chat Overrides)
+   ========================================================= */
+@media (max-width: 768px) {
+  .app-layout, .main-area {
+    height: 100dvh;
+  }
+  .content-area {
+    padding: 16px 12px;
+  }
+  .chat-layout {
+    height: calc(100dvh - 68px - 32px) !important; /* 68px header, 32px padding */
+  }
+  .chat-quick-grid {
+    grid-template-columns: 1fr;
+  }
+  .header-bar {
+    padding: 0 16px;
+  }
+  .chat-messages {
+    padding: 16px 12px;
+  }
+}
