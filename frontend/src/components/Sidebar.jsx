@@ -21,9 +21,7 @@ export default function Sidebar({ activePage, onNavigate }) {
     <aside className="sidebar">
       {/* Logo */}
       <div className="sidebar-logo">
-        <div className="sidebar-logo-icon">
-          <Scale size={20} color="#FFFFFF" />
-        </div>
+        <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 32, height: 32, borderRadius: 8, marginRight: 10, boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} />
         <div className="sidebar-logo-text">
           <h2>JurisAI</h2>
           <p>AI Legal Assistant</p>

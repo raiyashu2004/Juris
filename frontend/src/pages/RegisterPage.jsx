@@ -100,9 +100,7 @@ export default function RegisterPage({ onNavigate }) {
         <div className="auth-form-container">
           {/* Logo */}
           <div className="auth-logo" onClick={() => onNavigate("landing")}>
-            <div className="landing-nav-logo">
-              <Scale size={20} color="#FFFFFF" />
-            </div>
+            <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 48, height: 48, borderRadius: 12, marginRight: 12, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }} />
             <span className="auth-logo-text">JurisAI</span>
           </div>
 

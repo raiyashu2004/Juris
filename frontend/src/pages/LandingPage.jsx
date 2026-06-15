@@ -41,12 +41,10 @@ export default function LandingPage({ onNavigate }) {
         <div className="landing-nav-inner">
           <div className="landing-nav-brand">
             <div className="landing-nav-logo">
-              <Scale size={20} color="#FFFFFF" />
-            </div>
-            <div>
+              <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 28, height: 28, borderRadius: 6, marginRight: 8 }} />
               <span className="landing-nav-name">JurisAI</span>
-              <span className="landing-nav-tag">AI Legal Assistant</span>
             </div>
+            <span className="landing-nav-tag">AI Legal Assistant</span>
           </div>
           <div className="landing-nav-links">
             <a href="#features">Features</a>
@@ -224,7 +222,7 @@ export default function LandingPage({ onNavigate }) {
           <div className="landing-footer-brand">
             <div className="landing-nav-brand">
               <div className="landing-nav-logo">
-                <Scale size={18} color="#FFFFFF" />
+                <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 28, height: 28, borderRadius: 6, marginRight: 8 }} />
               </div>
               <span className="landing-nav-name">JurisAI</span>
             </div>

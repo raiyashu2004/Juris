@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/scale.svg" width="80" height="80" alt="JurisAI Logo" />
+  <img src="./frontend/public/logo.jpg" width="80" height="80" alt="JurisAI Logo" style="border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
   <h1>JurisAI — Indian Legal AI Assistant</h1>
   <p>An AI-powered legal research and drafting platform built for Indian advocates and law students. Powered by Google Gemini and FastAPI.</p>
 
