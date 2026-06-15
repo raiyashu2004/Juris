@@ -175,25 +175,24 @@ export default function ChatPage() {
             </div>
           ))}
           <div ref={bot} />
-        </div>
-
-        {msgs.length <= 1 && (
-          <div style={{ padding: "0 18px 14px" }}>
-            <p style={{ fontSize: 11, color: "#94A3B8", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 8px" }}>Suggested queries</p>
-            <div className="chat-quick-grid">
-              {QUICK_QS.map((q, i) => (
-                <button
-                  key={i}
-                  className="chat-quick-btn"
-                  onClick={() => { setDomain(q.domain.charAt(0).toUpperCase() + q.domain.slice(1)); send(q.q); }}
-                >
-                  <span style={{ flexShrink: 0, fontSize: 14 }}>{q.icon}</span>
-                  <span>{q.q}</span>
-                </button>
-              ))}
+          {msgs.length <= 1 && (
+            <div style={{ paddingTop: 10 }}>
+              <p style={{ fontSize: 11, color: "#94A3B8", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 8px" }}>Suggested queries</p>
+              <div className="chat-quick-grid">
+                {QUICK_QS.map((q, i) => (
+                  <button
+                    key={i}
+                    className="chat-quick-btn"
+                    onClick={() => { setDomain(q.domain.charAt(0).toUpperCase() + q.domain.slice(1)); send(q.q); }}
+                  >
+                    <span style={{ flexShrink: 0, fontSize: 14 }}>{q.icon}</span>
+                    <span>{q.q}</span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="chat-input-area">
           <div className="chat-input-row">
