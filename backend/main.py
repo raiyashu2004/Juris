@@ -59,6 +59,14 @@ app.include_router(documents.router, prefix="/api/documents", tags=["Document An
 app.include_router(cases.router,     prefix="/api/cases",     tags=["Case Finder"])
 
 
+@app.get("/")
+async def root():
+    return {
+        "status": "NyayaBot Backend is Live",
+        "message": "The API is running successfully. Please use the frontend React app to interact with the bot.",
+        "docs": "/docs"
+    }
+
 @app.get("/api/health")
 async def health():
     return {"status": "ok", "service": "NyayaBot API"}
