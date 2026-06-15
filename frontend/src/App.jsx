@@ -21,6 +21,8 @@ function AppContent() {
   const [page, setPage] = useState("dashboard");
   const [authView, setAuthView] = useState("landing"); // "landing" | "login" | "register"
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   // Show loading spinner briefly on initial load
   if (loading) {
     return (
@@ -40,8 +42,6 @@ function AppContent() {
     }
     return <LandingPage onNavigate={(v) => setAuthView(v)} />;
   }
-
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Authenticated: show dashboard with sidebar
   const renderPage = () => {
