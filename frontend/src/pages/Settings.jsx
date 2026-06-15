@@ -15,7 +15,6 @@ export default function Settings() {
   // App preferences
   const [emailNotifs, setEmailNotifs] = useState(true);
   const [detailedAi, setDetailedAi] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -95,14 +94,6 @@ export default function Settings() {
                   <p style={{ margin: 0, fontSize: 13, color: "#64748B" }}>NyayaBot will generate longer, more comprehensive responses.</p>
                 </div>
                 <input type="checkbox" checked={detailedAi} onChange={e => setDetailedAi(e.target.checked)} style={{ width: 18, height: 18, accentColor: "#D4AF37" }} />
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 0" }}>
-                <div>
-                  <h4 style={{ margin: "0 0 4px", fontSize: 15 }}>Dark Mode</h4>
-                  <p style={{ margin: 0, fontSize: 13, color: "#64748B" }}>Switch dashboard to a dark color scheme.</p>
-                </div>
-                <input type="checkbox" checked={darkMode} onChange={e => setDarkMode(e.target.checked)} style={{ width: 18, height: 18, accentColor: "#D4AF37" }} />
               </div>
             </div>
           )}
