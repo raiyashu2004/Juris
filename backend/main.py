@@ -17,10 +17,18 @@ from utils.database import init_db
 async def lifespan(app: FastAPI):
     """Initialize services on startup."""
     print("🏛️  NyayaBot starting up...")
-    await init_db()
-    await EmbeddingService.initialize()
-    print("✅  Embedding model loaded")
-    print("✅  Database connected")
+    try:
+        await init_db()
+        print("✅  Database connected")
+    except Exception as e:
+        print(f"⚠️  Database connection failed: {e}. Running without DB.")
+    
+    try:
+        await EmbeddingService.initialize()
+        print("✅  Embedding model loaded")
+    except Exception as e:
+        print(f"⚠️  Embedding model failed: {e}")
+        
     print("🚀  NyayaBot ready")
     yield
     print("👋  NyayaBot shutting down")
