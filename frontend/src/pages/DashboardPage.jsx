@@ -1,73 +1,57 @@
-import { FileSearch, MessageSquare, Search, PenTool, Scale, BookOpen, FileText, Gavel } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 const STATS = [
-  { icon: Scale, label: "Constitution", value: "448 Articles", color: "#3B82F6", bg: "rgba(59,130,246,0.08)" },
-  { icon: BookOpen, label: "SC Judgments", value: "50,000+", color: "#8B5CF6", bg: "rgba(139,92,246,0.08)" },
-  { icon: FileText, label: "Central Acts", value: "200+", color: "#10B981", bg: "rgba(16,185,129,0.08)" },
-  { icon: Gavel, label: "High Courts", value: "25 Covered", color: "#F59E0B", bg: "rgba(245,158,11,0.08)" },
+  { label: "Articles", value: "448" },
+  { label: "SC Judgments", value: "50k+" },
+  { label: "Central Acts", value: "200+" },
+  { label: "High Courts", value: "25" },
 ];
 
 const ACTIONS = [
-  { id: "chat", icon: MessageSquare, label: "Chat with JurisAI", desc: "Ask questions about Indian law with cited answers from Constitution and case law.", color: "#3B82F6", bg: "rgba(59,130,246,0.08)" },
-  { id: "doc", icon: FileSearch, label: "Document Analyzer", desc: "Upload contracts, FIRs, or agreements — get risk flags, clause analysis, and relevant laws.", color: "#8B5CF6", bg: "rgba(139,92,246,0.08)" },
-  { id: "cases", icon: Search, label: "Case Finder", desc: "Find past Supreme Court and High Court judgments relevant to your legal matter.", color: "#10B981", bg: "rgba(16,185,129,0.08)" },
-  { id: "draft", icon: PenTool, label: "Draft Generator", desc: "AI-assisted drafting of bail applications, writ petitions, legal notices, and more.", color: "#F59E0B", bg: "rgba(245,158,11,0.08)" },
+  { id: "chat", label: "Chat with JurisAI" },
+  { id: "doc", label: "Document Analyzer" },
+  { id: "research", label: "Legal Research" },
+  { id: "cases", label: "Case Finder" },
+  { id: "draft", label: "Draft Generator" },
 ];
 
 export default function DashboardPage({ onNavigate }) {
   const { user } = useAuth();
-  const displayName = user?.fullName || "User";
 
   return (
-    <div>
-      {/* Welcome Banner */}
-      <div className="dashboard-welcome">
-        <h1>Welcome back, {displayName} 👋</h1>
-        <p>Your AI-powered legal research assistant for Indian law. What would you like to work on today?</p>
-      </div>
+    <div className="w-full">
+      {/* Ledger Stat Strip */}
+      <section className="mb-16 border-t-2 border-b-2 border-primary py-8 flex flex-wrap justify-between items-center gap-8">
+        {STATS.map((stat, i) => (
+          <div key={i} className="flex flex-col items-center flex-1 min-w-[120px]">
+            <span className="font-display-lg text-display-lg text-primary mb-2">{stat.value}</span>
+            <span className="font-label-sm text-label-sm text-secondary uppercase tracking-widest border-t border-primary pt-2 w-full text-center">
+              {stat.label}
+            </span>
+          </div>
+        ))}
+      </section>
 
-      {/* Stats Grid */}
-      <div className="dashboard-grid">
-        {STATS.map((stat, i) => {
-          const Icon = stat.icon;
-          return (
-            <div className="stat-card" key={i}>
-              <div className="stat-icon" style={{ background: stat.bg }}>
-                <Icon size={20} color={stat.color} />
-              </div>
-              <div className="stat-label">{stat.label}</div>
-              <div className="stat-value">{stat.value}</div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Action Cards */}
-      <div style={{ marginBottom: 16 }}>
-        <h3 style={{ fontSize: 16, fontWeight: 700, color: "#1E293B", marginBottom: 14 }}>Quick Actions</h3>
-      </div>
-      <div className="dashboard-actions">
-        {ACTIONS.map((action) => {
-          const Icon = action.icon;
-          return (
-            <div
+      {/* Quick Actions */}
+      <section>
+        <h2 className="font-headline-md text-headline-md text-primary mb-6">Quick Actions</h2>
+        <ul className="flex flex-col border-t border-primary">
+          {ACTIONS.map((action) => (
+            <li 
               key={action.id}
-              className="action-card"
+              className="border-b border-outline-variant py-4 flex items-center justify-between hover:bg-parchment-mid transition-colors cursor-pointer group px-2"
               onClick={() => onNavigate(action.id)}
-              id={`action-${action.id}`}
             >
-              <div className="action-card-icon" style={{ background: action.bg }}>
-                <Icon size={24} color={action.color} />
-              </div>
-              <div>
-                <h3>{action.label}</h3>
-                <p>{action.desc}</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+              <span className="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">
+                {action.label}
+              </span>
+              <span className="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">
+                arrow_forward
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

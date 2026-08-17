@@ -1,29 +1,24 @@
 import { useState } from "react";
-import {
-  Scale, MessageSquare, FileSearch, Search, PenTool, Shield,
-  ArrowRight, Star, CheckCircle, BookOpen, Sparkles, Users,
-  ChevronRight, Gavel, Award, Globe
-} from "lucide-react";
 
 const FEATURES = [
-  { icon: MessageSquare, title: "Smart Legal Research", desc: "Stop scrolling through endless search results. Get direct, plain-English answers backed strictly by Indian case law and bare acts.", color: "#3B82F6", bg: "rgba(59,130,246,0.1)" },
-  { icon: FileSearch, title: "Contract Risk Analysis", desc: "Upload a lease or employment agreement. We'll instantly flag one-sided clauses and missing protections before your client signs.", color: "#8B5CF6", bg: "rgba(139,92,246,0.1)" },
-  { icon: Search, title: "Precedent Search", desc: "Finding the right ratio decidendi is hard. Just describe your case facts, and we'll pull up the most relevant Supreme Court judgments.", color: "#10B981", bg: "rgba(16,185,129,0.1)" },
-  { icon: PenTool, title: "Drafting Assistant", desc: "Drafting an anticipatory bail application? Let us handle the standard formatting and citations so you can focus on the arguments.", color: "#F59E0B", bg: "rgba(245,158,11,0.1)" },
-  { icon: Shield, title: "Verified Citations Only", desc: "We know fake citations can ruin a case. If we don't have a verified source for a legal claim, we simply won't give it to you.", color: "#EF4444", bg: "rgba(239,68,68,0.1)" },
-  { icon: BookOpen, title: "Built on Bare Acts", desc: "Trained exclusively on the Indian Constitution, major penal codes (IPC/BNS), civil codes, and decades of high court rulings.", color: "#0EA5E9", bg: "rgba(14,165,233,0.1)" },
+  { icon: "psychiatry", title: "Smart Legal Research", desc: "Stop scrolling through endless search results. Get direct, plain-English answers backed strictly by Indian case law and bare acts." },
+  { icon: "find_in_page", title: "Contract Risk Analysis", desc: "Upload a lease or employment agreement. We'll instantly flag one-sided clauses and missing protections before your client signs." },
+  { icon: "manage_search", title: "Precedent Search", desc: "Finding the right ratio decidendi is hard. Just describe your case facts, and we'll pull up the most relevant Supreme Court judgments." },
+  { icon: "history_edu", title: "Drafting Assistant", desc: "Drafting an anticipatory bail application? Let us handle the standard formatting and citations so you can focus on the arguments." },
+  { icon: "verified_user", title: "Verified Citations Only", desc: "We know fake citations can ruin a case. If we don't have a verified source for a legal claim, we simply won't give it to you." },
+  { icon: "menu_book", title: "Built on Bare Acts", desc: "Trained exclusively on the Indian Constitution, major penal codes (IPC/BNS), civil codes, and decades of high court rulings." },
 ];
 
 const STEPS = [
   { num: "01", title: "Bring your problem", desc: "Upload a messy contract for review, or just type out the facts of a property dispute you're currently handling." },
-  { num: "02", title: "We hit the books", desc: "JurisAI scans through thousands of Indian statutes and precedents in seconds to find what actually applies to your facts." },
+  { num: "02", title: "We hit the books", desc: "Juris scans through thousands of Indian statutes and precedents in seconds to find what actually applies to your facts." },
   { num: "03", title: "Build your case", desc: "Get actionable insights, highlighted risk clauses, and exactly formatted citations to drop straight into your petition." },
 ];
 
 const TESTIMONIALS = [
-  { name: "Adv. Priya Sharma", role: "Delhi High Court", text: "Manually reviewing a 50-page commercial lease used to eat up my entire weekend. Now I just run it through the analyzer to catch the worst clauses, giving me a massive head start.", rating: 5 },
-  { name: "Rajesh Iyer", role: "Corporate Counsel, Mumbai", text: "Finding the exact legal precedent for an obscure property dispute is usually a nightmare. This actually understands the context of what I'm looking for and pulls up directly applicable SC judgments.", rating: 5 },
-  { name: "Adv. Meera Patel", role: "Criminal Defense, Gujarat", text: "I was extremely skeptical about an AI making up fake cases. But the fact that it strictly limits itself to verified bare acts is a huge relief. It saves me hours on initial bail drafts.", rating: 5 },
+  { name: "Adv. Priya Sharma", role: "Delhi High Court", text: "Manually reviewing a 50-page commercial lease used to eat up my entire weekend. Now I just run it through the analyzer to catch the worst clauses, giving me a massive head start." },
+  { name: "Rajesh Iyer", role: "Corporate Counsel, Mumbai", text: "Finding the exact legal precedent for an obscure property dispute is usually a nightmare. This actually understands the context of what I'm looking for and pulls up directly applicable SC judgments." },
+  { name: "Adv. Meera Patel", role: "Criminal Defense, Gujarat", text: "I was extremely skeptical about an AI making up fake cases. But the fact that it strictly limits itself to verified bare acts is a huge relief. It saves me hours on initial bail drafts." },
 ];
 
 const STATS = [
@@ -35,226 +30,193 @@ const STATS = [
 
 export default function LandingPage({ onNavigate }) {
   return (
-    <div className="landing-page">
+    <div className="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex flex-col">
       {/* ── Navbar ──────────────────────────────────── */}
-      <nav className="landing-nav">
-        <div className="landing-nav-inner">
-          <div className="landing-nav-brand">
-            <div className="landing-nav-logo">
-              <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 28, height: 28, borderRadius: 6 }} />
-            </div>
-            <div style={{ marginLeft: 8, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <span className="landing-nav-name" style={{ lineHeight: 1 }}>JurisAI</span>
-              <span className="landing-nav-tag" style={{ lineHeight: 1, marginTop: 4 }}>AI Legal Assistant</span>
-            </div>
-          </div>
-          <div className="landing-nav-links">
-            <a href="#features">Features</a>
-            <a href="#how-it-works">How It Works</a>
-            <a href="#testimonials">Testimonials</a>
-          </div>
-          <div className="landing-nav-actions">
-            <button className="landing-btn-ghost" onClick={() => onNavigate("login")}>
-              Log In
-            </button>
-            <button className="landing-btn-primary" onClick={() => onNavigate("register")}>
-              Get Started Free
-              <ArrowRight size={16} />
-            </button>
-          </div>
+      <nav className="fixed top-0 left-0 right-0 h-16 border-b border-outline-variant bg-surface-container-lowest flex justify-between items-center px-lg z-50">
+        <div className="flex items-center gap-md">
+          <h1 className="font-display-lg text-[24px] text-primary tracking-tight">Juris</h1>
+          <span className="font-label-sm text-[10px] text-secondary uppercase tracking-widest border border-outline-variant px-2 py-0.5 hidden md:block">Legal Interface</span>
+        </div>
+        
+        <div className="hidden md:flex items-center gap-xl font-label-sm text-label-sm uppercase tracking-wider text-secondary">
+          <a href="#features" className="hover:text-primary transition-colors">Features</a>
+          <a href="#how-it-works" className="hover:text-primary transition-colors">How It Works</a>
+          <a href="#testimonials" className="hover:text-primary transition-colors">Testimonials</a>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <button 
+            className="font-label-sm text-label-sm text-secondary uppercase tracking-wider hover:text-primary transition-colors" 
+            onClick={() => onNavigate("login")}
+          >
+            Log In
+          </button>
+          <button 
+            className="bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-wider px-4 py-2 border border-primary hover:bg-surface-container-highest hover:text-primary transition-colors flex items-center gap-2"
+            onClick={() => onNavigate("register")}
+          >
+            Get Started <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </button>
         </div>
       </nav>
 
-      {/* ── Hero ───────────────────────────────────── */}
-      <section className="landing-hero">
-        <div className="landing-hero-bg">
-          <div className="landing-hero-orb orb-1" />
-          <div className="landing-hero-orb orb-2" />
-          <div className="landing-hero-orb orb-3" />
-        </div>
-        <div className="landing-hero-content">
-          <div className="landing-badge">
-            <span className="landing-badge-icon">✨</span>
-            Powered by Advanced AI · Trusted by 100+ Advocates
+      <main className="flex-1 mt-16">
+        {/* ── Hero ───────────────────────────────────── */}
+        <section className="border-b border-outline-variant px-margin py-24 flex flex-col items-center text-center bg-surface-container-lowest relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full border-t border-outline-variant" style={{ backgroundImage: "linear-gradient(#e2e2e2 1px, transparent 1px), linear-gradient(90deg, #e2e2e2 1px, transparent 1px)", backgroundSize: "40px 40px", opacity: 0.3 }} />
+          
+          <div className="relative z-10 max-w-4xl flex flex-col items-center">
+            <span className="font-citation text-citation text-secondary border border-outline-variant bg-surface px-3 py-1 mb-6 flex items-center gap-2">
+              <span className="material-symbols-outlined text-[16px] text-primary">psychiatry</span>
+              Powered by Advanced AI · Trusted by 100+ Advocates
+            </span>
+            
+            <h1 className="font-display-lg text-[64px] leading-tight text-primary mb-6">
+              India's Most Trusted<br/>
+              <span className="italic text-secondary">AI Legal Assistant</span>
+            </h1>
+            
+            <p className="font-body-lg text-[20px] text-on-surface-variant max-w-3xl mb-12">
+              Research Indian law, analyze legal documents, find case precedents, and draft petitions — all with verified citations from the Constitution, Supreme Court, and High Court judgments.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button 
+                className="bg-primary text-on-primary font-label-sm text-[14px] uppercase tracking-wider px-8 py-4 border border-primary hover:bg-surface-container-highest hover:text-primary transition-colors flex items-center gap-2 justify-center"
+                onClick={() => onNavigate("register")}
+              >
+                Start Free Research
+                <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+              </button>
+              <button 
+                className="bg-transparent text-primary font-label-sm text-[14px] uppercase tracking-wider px-8 py-4 border border-primary hover:bg-surface-container-low transition-colors flex items-center gap-2 justify-center"
+                onClick={() => onNavigate("login")}
+              >
+                Log In to Dashboard
+              </button>
+            </div>
           </div>
-          <h1 className="landing-hero-title">
-            India's Most Trusted
-            <span className="landing-hero-gradient"> AI Legal Assistant</span>
-          </h1>
-          <p className="landing-hero-subtitle">
-            Research Indian law, analyze legal documents, find case precedents, and draft petitions — all with verified citations from the Constitution, Supreme Court, and High Court judgments.
-          </p>
-          <div className="landing-hero-actions">
-            <button className="landing-btn-primary large" onClick={() => onNavigate("register")}>
-              Start Free Research
-              <ArrowRight size={18} />
-            </button>
-            <button className="landing-btn-outline large" onClick={() => onNavigate("login")}>
-              Log In to Dashboard
-            </button>
-          </div>
-          <div className="landing-hero-trust">
-            <div className="landing-hero-avatars">
-              {["P", "R", "M", "A", "S"].map((l, i) => (
-                <div key={i} className="landing-hero-avatar-dot" style={{ zIndex: 5 - i, marginLeft: i > 0 ? -8 : 0 }}>
-                  {l}
+        </section>
+
+        {/* ── Stats Bar ──────────────────────────────── */}
+        <section className="border-b border-outline-variant bg-surface-bright divide-y md:divide-y-0 md:divide-x divide-outline-variant flex flex-col md:flex-row">
+          {STATS.map((s, i) => (
+            <div key={i} className="flex-1 py-8 px-6 flex flex-col items-center text-center">
+              <div className="font-headline-lg text-[40px] text-primary mb-2">{s.value}</div>
+              <div className="font-label-sm text-label-sm text-secondary uppercase tracking-widest">{s.label}</div>
+            </div>
+          ))}
+        </section>
+
+        {/* ── Features ───────────────────────────────── */}
+        <section id="features" className="border-b border-outline-variant bg-surface-container-lowest">
+          <div className="px-margin py-20 max-w-[1400px] mx-auto">
+            <div className="mb-16 border-l-4 border-primary pl-6">
+              <span className="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Features</span>
+              <h2 className="font-display-lg text-[48px] text-primary mt-2">Everything You Need.</h2>
+              <p className="font-body-lg text-body-lg text-on-surface-variant mt-4 max-w-2xl">Powerful AI tools designed specifically for Indian legal professionals.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-outline-variant">
+              {FEATURES.map((f, i) => (
+                <div key={i} className="border-b border-r border-outline-variant p-8 hover:bg-surface-container-low transition-colors group">
+                  <span className="material-symbols-outlined text-[32px] text-primary mb-6 group-hover:scale-110 transition-transform">{f.icon}</span>
+                  <h3 className="font-headline-md text-[24px] text-primary mb-4">{f.title}</h3>
+                  <p className="font-body-md text-body-md text-on-surface-variant">{f.desc}</p>
                 </div>
               ))}
             </div>
-            <div>
-              <div className="landing-hero-stars">
-                {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="#F59E0B" color="#F59E0B" />)}
-              </div>
-              <p className="landing-hero-trust-text">Trusted by 100+ advocates across India</p>
+          </div>
+        </section>
+
+        {/* ── How It Works ───────────────────────────── */}
+        <section id="how-it-works" className="border-b border-outline-variant bg-surface-bright">
+          <div className="px-margin py-20 max-w-[1400px] mx-auto">
+            <div className="mb-16 border-l-4 border-primary pl-6">
+              <span className="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Workflow</span>
+              <h2 className="font-display-lg text-[48px] text-primary mt-2">3 Simple Steps.</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {STEPS.map((s, i) => (
+                <div key={i} className="flex flex-col relative">
+                  <div className="font-label-sm text-[80px] leading-none text-surface-container-highest font-bold mb-4">{s.num}</div>
+                  <h3 className="font-headline-md text-[24px] text-primary mb-4">{s.title}</h3>
+                  <p className="font-body-md text-body-md text-on-surface-variant">{s.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── Stats Bar ──────────────────────────────── */}
-      <section className="landing-stats">
-        <div className="landing-stats-inner">
-          {STATS.map((s, i) => (
-            <div key={i} className="landing-stat-item">
-              <div className="landing-stat-value">{s.value}</div>
-              <div className="landing-stat-label">{s.label}</div>
+        {/* ── Testimonials ───────────────────────────── */}
+        <section id="testimonials" className="border-b border-outline-variant bg-surface-container-lowest">
+          <div className="px-margin py-20 max-w-[1400px] mx-auto">
+            <div className="mb-16 border-l-4 border-primary pl-6">
+              <span className="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Testimonials</span>
+              <h2 className="font-display-lg text-[48px] text-primary mt-2">Trusted by Professionals.</h2>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Features ───────────────────────────────── */}
-      <section className="landing-section" id="features">
-        <div className="landing-section-inner">
-          <div className="landing-section-header">
-            <span className="landing-section-badge">Features</span>
-            <h2 className="landing-section-title">Everything You Need for Legal Research</h2>
-            <p className="landing-section-subtitle">Powerful AI tools designed specifically for Indian legal professionals</p>
-          </div>
-          <div className="landing-features-grid">
-            {FEATURES.map((f, i) => {
-              const Icon = f.icon;
-              return (
-                <div key={i} className="landing-feature-card">
-                  <div className="landing-feature-icon" style={{ background: f.bg }}>
-                    <Icon size={24} color={f.color} />
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {TESTIMONIALS.map((t, i) => (
+                <div key={i} className="border border-outline-variant p-8 bg-background flex flex-col">
+                  <div className="flex gap-1 mb-6 text-primary">
+                    <span className="material-symbols-outlined" data-weight="fill">star</span>
+                    <span className="material-symbols-outlined" data-weight="fill">star</span>
+                    <span className="material-symbols-outlined" data-weight="fill">star</span>
+                    <span className="material-symbols-outlined" data-weight="fill">star</span>
+                    <span className="material-symbols-outlined" data-weight="fill">star</span>
                   </div>
-                  <h3>{f.title}</h3>
-                  <p>{f.desc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── How It Works ───────────────────────────── */}
-      <section className="landing-section alt" id="how-it-works">
-        <div className="landing-section-inner">
-          <div className="landing-section-header">
-            <span className="landing-section-badge">How It Works</span>
-            <h2 className="landing-section-title">Get Legal Insights in 3 Simple Steps</h2>
-          </div>
-          <div className="landing-steps">
-            {STEPS.map((s, i) => (
-              <div key={i} className="landing-step-card">
-                <div className="landing-step-num">{s.num}</div>
-                <h3>{s.title}</h3>
-                <p>{s.desc}</p>
-                {i < STEPS.length - 1 && (
-                  <div className="landing-step-arrow">
-                    <ChevronRight size={24} />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Testimonials ───────────────────────────── */}
-      <section className="landing-section" id="testimonials">
-        <div className="landing-section-inner">
-          <div className="landing-section-header">
-            <span className="landing-section-badge">Testimonials</span>
-            <h2 className="landing-section-title">Trusted by Legal Professionals</h2>
-            <p className="landing-section-subtitle">See what advocates across India are saying about JurisAI</p>
-          </div>
-          <div className="landing-testimonials-grid">
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="landing-testimonial-card">
-                <div className="landing-testimonial-stars">
-                  {[...Array(t.rating)].map((_, j) => <Star key={j} size={14} fill="#F59E0B" color="#F59E0B" />)}
-                </div>
-                <p className="landing-testimonial-text">"{t.text}"</p>
-                <div className="landing-testimonial-author">
-                  <div className="landing-testimonial-avatar">
-                    {t.name.split(" ")[1]?.[0] || t.name[0]}
-                  </div>
-                  <div>
-                    <div className="landing-testimonial-name">{t.name}</div>
-                    <div className="landing-testimonial-role">{t.role}</div>
+                  <p className="font-body-lg text-body-lg italic text-on-surface mb-8 flex-1">"{t.text}"</p>
+                  <div className="border-t border-outline-variant pt-4">
+                    <div className="font-label-sm text-[14px] font-bold text-primary">{t.name}</div>
+                    <div className="font-label-sm text-[12px] text-secondary uppercase tracking-wider">{t.role}</div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── CTA ────────────────────────────────────── */}
-      <section className="landing-cta">
-        <div className="landing-cta-inner">
-          <div className="landing-cta-bg">
-            <div className="landing-hero-orb orb-1" />
-            <div className="landing-hero-orb orb-2" />
-          </div>
-          <h2>Start Your Legal Research Today</h2>
-          <p>Join 100+ legal professionals who trust JurisAI for accurate, cited legal research.</p>
-          <button className="landing-btn-primary large white" onClick={() => onNavigate("register")}>
+        {/* ── CTA ────────────────────────────────────── */}
+        <section className="bg-primary text-on-primary py-24 text-center px-margin border-b-8 border-secondary">
+          <h2 className="font-display-lg text-[56px] mb-6">Start Your Legal Research Today</h2>
+          <p className="font-body-lg text-on-primary-container max-w-2xl mx-auto mb-10">Join 100+ legal professionals who trust Juris for accurate, cited legal research.</p>
+          <button 
+            className="bg-surface-container-lowest text-primary font-label-sm text-[14px] uppercase tracking-wider px-8 py-4 border border-transparent hover:bg-surface-container-high transition-colors inline-flex items-center gap-2"
+            onClick={() => onNavigate("register")}
+          >
             Create Free Account
-            <ArrowRight size={18} />
+            <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
           </button>
-        </div>
-      </section>
+        </section>
+      </main>
 
       {/* ── Footer ─────────────────────────────────── */}
-      <footer className="landing-footer">
-        <div className="landing-footer-inner">
-          <div className="landing-footer-brand">
-            <div className="landing-nav-brand">
-              <div className="landing-nav-logo">
-                <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 28, height: 28, borderRadius: 6 }} />
-              </div>
-              <div style={{ marginLeft: 8, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                <span className="landing-nav-name" style={{ lineHeight: 1 }}>JurisAI</span>
-              </div>
-            </div>
-            <p>AI-powered legal research assistant for Indian law. Providing verified, cited legal information to advocates, law students, and citizens.</p>
+      <footer className="bg-surface-container-lowest border-t border-outline-variant py-12 px-margin">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between gap-12">
+          <div className="max-w-sm">
+            <h1 className="font-display-lg text-[24px] text-primary tracking-tight mb-4">Juris</h1>
+            <p className="font-body-md text-secondary">AI-powered legal research assistant for Indian law. Providing verified, cited legal information to advocates, law students, and citizens.</p>
           </div>
-          <div className="landing-footer-links">
-            <div>
-              <h4>Product</h4>
-              <a href="#features">Features</a>
-              <a href="#how-it-works">How It Works</a>
-              <a href="#testimonials">Testimonials</a>
+          
+          <div className="flex gap-16 font-label-sm text-label-sm uppercase tracking-wider">
+            <div className="flex flex-col gap-4">
+              <span className="text-primary font-bold mb-2">Product</span>
+              <a href="#features" className="text-secondary hover:text-primary">Features</a>
+              <a href="#how-it-works" className="text-secondary hover:text-primary">Workflow</a>
+              <a href="#testimonials" className="text-secondary hover:text-primary">Testimonials</a>
             </div>
-            <div>
-              <h4>Legal</h4>
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms of Service</a>
-              <a href="#">Disclaimer</a>
-            </div>
-            <div>
-              <h4>Support</h4>
-              <a href="#">Help Center</a>
-              <a href="#">Contact Us</a>
-              <a href="#">API Docs</a>
+            <div className="flex flex-col gap-4">
+              <span className="text-primary font-bold mb-2">Legal</span>
+              <a href="#" className="text-secondary hover:text-primary">Privacy Policy</a>
+              <a href="#" className="text-secondary hover:text-primary">Terms of Service</a>
+              <a href="#" className="text-secondary hover:text-primary">Disclaimer</a>
             </div>
           </div>
         </div>
-        <div className="landing-footer-bottom">
-          <p>© 2025 JurisAI. All rights reserved. Not a substitute for qualified legal advice.</p>
+        <div className="max-w-[1400px] mx-auto mt-12 pt-8 border-t border-outline-variant text-center md:text-left">
+          <p className="font-citation text-citation text-secondary">© 2025 Juris. All rights reserved. Not a substitute for qualified legal advice.</p>
         </div>
       </footer>
     </div>

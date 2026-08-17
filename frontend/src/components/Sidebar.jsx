@@ -1,64 +1,71 @@
-import {
-  LayoutDashboard, MessageSquare, FileSearch, Scale, Search,
-  PenTool, FolderOpen, FileText, Bookmark, Settings, Sparkles, X
-} from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const NAV_ITEMS = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "chat", label: "Chat with JurisAI", icon: MessageSquare },
-  { id: "doc", label: "Document Analyzer", icon: FileSearch },
-  { id: "research", label: "Legal Research", icon: Scale },
-  { id: "cases", label: "Case Finder", icon: Search },
-  { id: "draft", label: "Draft Generator", icon: PenTool },
-  { id: "documents", label: "My Documents", icon: FolderOpen },
-  { id: "templates", label: "Templates", icon: FileText },
-  { id: "saved", label: "Saved Research", icon: Bookmark },
-  { id: "settings", label: "Settings", icon: Settings },
+  { id: "dashboard", label: "Home", icon: "home" },
+  { id: "chat", label: "Gavel", icon: "gavel" },
+  { id: "doc", label: "Scroll", icon: "description" },
+  { id: "research", label: "Ledger", icon: "menu_book" },
+  { id: "saved", label: "Archive", icon: "inventory_2" }
 ];
 
 export default function Sidebar({ activePage, onNavigate, isMobileMenuOpen, setIsMobileMenuOpen }) {
+  const { user, logout } = useAuth();
+
   return (
     <>
+      {/* Mobile Overlay */}
       {isMobileMenuOpen && (
-        <div className="mobile-sidebar-overlay" onClick={() => setIsMobileMenuOpen(false)} />
+        <div 
+          className="md:hidden fixed inset-0 bg-primary/20 z-40"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
       )}
-      <aside className={`sidebar ${isMobileMenuOpen ? "open" : ""}`}>
-        {/* Logo */}
-        <div className="sidebar-logo" style={{ position: 'relative' }}>
-          <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 32, height: 32, borderRadius: 8, marginRight: 10, boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} />
-          <div className="sidebar-logo-text">
-            <h2>JurisAI</h2>
-            <p>AI Legal Assistant</p>
-          </div>
-          <button className="sidebar-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
-            <X size={20} />
-          </button>
-        </div>
 
-        {/* Navigation */}
-        <nav className="sidebar-nav">
+      <nav className={`${isMobileMenuOpen ? "flex" : "hidden"} md:flex h-full w-64 flex-col border-r-2 border-primary bg-parchment-mid fixed left-0 top-0 z-50 py-8 px-4 transition-transform duration-300 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
+        <div className="mb-12">
+          <h1 className="font-headline-lg text-headline-lg text-primary uppercase tracking-tight">Juris</h1>
+          <p className="font-label-sm text-label-sm text-secondary mt-1">Legal Research Suite</p>
+        </div>
+        
+        <button 
+          className="bg-primary text-on-primary font-body-md text-body-md py-3 px-4 mb-8 flex items-center justify-center gap-2 hover:bg-primary-container transition-colors"
+          onClick={() => onNavigate("chat")}
+        >
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>add</span>
+          New Draft
+        </button>
+        
+        <ul className="flex flex-col space-y-4">
           {NAV_ITEMS.map((item) => {
-            const Icon = item.icon;
+            const isActive = activePage === item.id;
             return (
-              <button
-                key={item.id}
-                id={`nav-${item.id}`}
-                className={`nav-item ${activePage === item.id ? "active" : ""}`}
-                onClick={() => { onNavigate(item.id); setIsMobileMenuOpen && setIsMobileMenuOpen(false); }}
-              >
-                <Icon size={18} />
-                <span>{item.label}</span>
-              </button>
+              <li key={item.id}>
+                <button
+                  className={`w-full flex items-center gap-3 py-2 pl-4 transition-colors font-headline-md text-headline-md text-left ${isActive ? "text-primary border-l-2 border-primary italic opacity-90" : "text-secondary hover:bg-parchment-deep border-l-2 border-transparent"}`}
+                  onClick={() => onNavigate(item.id)}
+                >
+                  <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>
+                    {item.icon}
+                  </span>
+                  <span className="font-label-sm text-label-sm">{item.label}</span>
+                </button>
+              </li>
             );
           })}
-        </nav>
-
-        {/* Footer */}
-        <div className="sidebar-footer">
-          <p>© 2025 JurisAI</p>
-          <p>All rights reserved.</p>
+        </ul>
+        
+        <div className="mt-auto pt-8 border-t border-outline-variant opacity-80 flex items-center justify-between gap-3 group cursor-pointer" onClick={logout} title="Log out">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-none bg-primary text-on-primary flex items-center justify-center font-display-lg text-xl flex-shrink-0">
+              {user?.fullName?.charAt(0) || "U"}
+            </div>
+            <div className="overflow-hidden">
+              <p className="font-label-sm text-label-sm text-primary truncate w-[130px]">{user?.fullName || "User"}</p>
+              <p className="font-label-sm text-[10px] text-secondary group-hover:text-error transition-colors uppercase">Log Out</p>
+            </div>
+          </div>
         </div>
-      </aside>
+      </nav>
     </>
   );
 }

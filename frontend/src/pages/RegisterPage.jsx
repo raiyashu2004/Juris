@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Scale, Eye, EyeOff, ArrowRight, CheckCircle } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 const BAR_COUNCILS = [
@@ -86,7 +85,6 @@ export default function RegisterPage({ onNavigate }) {
       setError(result.error);
       setLoading(false);
     } else if (result.message) {
-      // Email confirmation sent
       alert(result.message);
       setLoading(false);
       onNavigate("login");
@@ -94,65 +92,67 @@ export default function RegisterPage({ onNavigate }) {
   };
 
   return (
-    <div className="auth-page">
+    <div className="min-h-screen flex bg-background font-body-md text-on-background">
       {/* Left: Form */}
-      <div className="auth-form-side">
-        <div className="auth-form-container">
+      <div className="flex-1 flex flex-col p-8 md:p-16 bg-surface-container-lowest overflow-y-auto">
+        <div className="w-full max-w-xl mx-auto">
           {/* Logo */}
-          <div className="auth-logo" onClick={() => onNavigate("landing")}>
-            <img src="/logo.jpg" alt="JurisAI Logo" style={{ width: 48, height: 48, borderRadius: 12, marginRight: 12, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }} />
-            <span className="auth-logo-text">JurisAI</span>
+          <div className="flex items-center gap-3 mb-12 cursor-pointer" onClick={() => onNavigate("landing")}>
+            <div className="h-10 w-10 bg-primary flex items-center justify-center border border-outline-variant">
+              <span className="font-display-lg text-on-primary text-xl tracking-tighter">J</span>
+            </div>
+            <span className="font-display-lg text-[24px] text-primary tracking-tight">Juris</span>
           </div>
 
-          <h1 className="auth-title">Create your account</h1>
-          <p className="auth-subtitle">Join thousands of legal professionals using JurisAI</p>
+          <h1 className="font-headline-lg text-[32px] text-primary mb-2">Create your account</h1>
+          <p className="font-body-md text-secondary mb-8">Join thousands of legal professionals using Juris</p>
 
           {error && (
-            <div className="auth-error">
-              <span>{error}</span>
+            <div className="border border-error bg-error-container p-4 mb-6">
+              <span className="font-body-md text-error">{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="auth-form">
-            <div className="auth-field">
-              <label>Full Name *</label>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="font-label-sm text-label-sm text-primary uppercase">Full Name *</label>
               <input
                 type="text"
                 placeholder="e.g. Adv. Aarav Sharma"
                 value={form.fullName}
                 onChange={(e) => update("fullName", e.target.value)}
-                id="register-name"
+                className="border border-outline-variant bg-surface p-3 text-body-md focus:border-primary focus:outline-none transition-colors"
               />
             </div>
 
-            <div className="auth-field">
-              <label>Email Address *</label>
+            <div className="flex flex-col gap-2">
+              <label className="font-label-sm text-label-sm text-primary uppercase">Email Address *</label>
               <input
                 type="email"
                 placeholder="you@example.com"
                 value={form.email}
                 onChange={(e) => update("email", e.target.value)}
-                id="register-email"
+                className="border border-outline-variant bg-surface p-3 text-body-md focus:border-primary focus:outline-none transition-colors"
               />
             </div>
 
-            <div className="auth-row">
-              <div className="auth-field">
-                <label>Bar Council Reg. No.</label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="font-label-sm text-label-sm text-primary uppercase">Bar Council Reg. No.</label>
                 <input
                   type="text"
                   placeholder="e.g. D/1234/2020"
                   value={form.barCouncilId}
                   onChange={(e) => update("barCouncilId", e.target.value)}
-                  id="register-barcouncil-id"
+                  className="border border-outline-variant bg-surface p-3 text-body-md focus:border-primary focus:outline-none transition-colors"
                 />
               </div>
-              <div className="auth-field">
-                <label>State Bar Council</label>
+              <div className="flex flex-col gap-2">
+                <label className="font-label-sm text-label-sm text-primary uppercase">State Bar Council</label>
                 <select
                   value={form.stateBarCouncil}
                   onChange={(e) => update("stateBarCouncil", e.target.value)}
-                  id="register-state-bar"
+                  className="border border-outline-variant bg-surface p-3 text-body-md focus:border-primary focus:outline-none transition-colors appearance-none cursor-pointer"
                 >
                   <option value="">Select...</option>
                   {BAR_COUNCILS.map((bc) => (
@@ -162,12 +162,12 @@ export default function RegisterPage({ onNavigate }) {
               </div>
             </div>
 
-            <div className="auth-field">
-              <label>Specialization</label>
+            <div className="flex flex-col gap-2">
+              <label className="font-label-sm text-label-sm text-primary uppercase">Specialization</label>
               <select
                 value={form.specialization}
                 onChange={(e) => update("specialization", e.target.value)}
-                id="register-specialization"
+                className="border border-outline-variant bg-surface p-3 text-body-md focus:border-primary focus:outline-none transition-colors appearance-none cursor-pointer"
               >
                 <option value="">Select your area of practice...</option>
                 {SPECIALIZATIONS.map((s) => (
@@ -176,87 +176,85 @@ export default function RegisterPage({ onNavigate }) {
               </select>
             </div>
 
-            <div className="auth-row">
-              <div className="auth-field">
-                <label>Password *</label>
-                <div className="auth-pw-wrapper">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="font-label-sm text-label-sm text-primary uppercase">Password *</label>
+                <div className="relative border border-outline-variant bg-surface focus-within:border-primary transition-colors flex">
                   <input
                     type={showPw ? "text" : "password"}
                     placeholder="Min. 6 characters"
                     value={form.password}
                     onChange={(e) => update("password", e.target.value)}
-                    id="register-password"
+                    className="flex-1 bg-transparent p-3 text-body-md focus:outline-none"
                   />
-                  <button type="button" className="auth-pw-toggle" onClick={() => setShowPw(!showPw)}>
-                    {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                  <button type="button" className="p-3 text-secondary hover:text-primary flex items-center" onClick={() => setShowPw(!showPw)}>
+                    <span className="material-symbols-outlined text-[20px]">{showPw ? "visibility_off" : "visibility"}</span>
                   </button>
                 </div>
               </div>
-              <div className="auth-field">
-                <label>Confirm Password *</label>
-                <div className="auth-pw-wrapper">
+              <div className="flex flex-col gap-2">
+                <label className="font-label-sm text-label-sm text-primary uppercase">Confirm Password *</label>
+                <div className="relative border border-outline-variant bg-surface focus-within:border-primary transition-colors flex">
                   <input
                     type={showCpw ? "text" : "password"}
                     placeholder="Re-enter password"
                     value={form.confirmPassword}
                     onChange={(e) => update("confirmPassword", e.target.value)}
-                    id="register-confirm-password"
+                    className="flex-1 bg-transparent p-3 text-body-md focus:outline-none"
                   />
-                  <button type="button" className="auth-pw-toggle" onClick={() => setShowCpw(!showCpw)}>
-                    {showCpw ? <EyeOff size={16} /> : <Eye size={16} />}
+                  <button type="button" className="p-3 text-secondary hover:text-primary flex items-center" onClick={() => setShowCpw(!showCpw)}>
+                    <span className="material-symbols-outlined text-[20px]">{showCpw ? "visibility_off" : "visibility"}</span>
                   </button>
                 </div>
               </div>
             </div>
 
-            <label className="auth-checkbox">
+            <label className="flex items-center gap-3 cursor-pointer mt-2">
               <input
                 type="checkbox"
                 checked={form.agreeTerms}
                 onChange={(e) => update("agreeTerms", e.target.checked)}
-                id="register-terms"
+                className="w-4 h-4 border-outline-variant bg-surface text-primary focus:ring-0 focus:ring-offset-0"
               />
-              <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+              <span className="font-body-md text-on-surface-variant">
+                I agree to the <a href="#" className="text-primary underline">Terms of Service</a> and <a href="#" className="text-primary underline">Privacy Policy</a>
+              </span>
             </label>
 
-            <button type="submit" className="auth-submit-btn" disabled={loading} id="register-submit">
+            <button type="submit" className="bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-wider p-4 border border-primary hover:bg-surface-container-highest hover:text-primary transition-colors flex justify-center items-center gap-2 mt-4" disabled={loading}>
               {loading ? "Creating account…" : "Create Account"}
-              {!loading && <ArrowRight size={16} />}
+              {!loading && <span className="material-symbols-outlined text-[18px]">arrow_forward</span>}
             </button>
           </form>
 
-          <p className="auth-switch">
+          <p className="font-body-md text-secondary mt-8 text-center pb-12">
             Already have an account?{" "}
-            <button onClick={() => onNavigate("login")}>Log in</button>
+            <button className="text-primary hover:underline underline-offset-4" onClick={() => onNavigate("login")}>Log in</button>
           </p>
         </div>
       </div>
 
       {/* Right: Branded Panel */}
-      <div className="auth-brand-side">
-        <div className="auth-brand-content">
-          <div className="auth-brand-badge">
-            <Scale size={32} color="#FFFFFF" />
-          </div>
-          <h2>Your AI Legal Research Partner</h2>
-          <p>Access India's most comprehensive AI-powered legal research platform with verified citations.</p>
-          <div className="auth-brand-features">
-            <div className="auth-brand-feature">
-              <CheckCircle size={18} color="#60A5FA" />
-              <span>Constitution & 50,000+ SC judgments</span>
-            </div>
-            <div className="auth-brand-feature">
-              <CheckCircle size={18} color="#60A5FA" />
-              <span>Document risk analysis with AI</span>
-            </div>
-            <div className="auth-brand-feature">
-              <CheckCircle size={18} color="#60A5FA" />
-              <span>Anti-hallucination — no fabricated citations</span>
-            </div>
-            <div className="auth-brand-feature">
-              <CheckCircle size={18} color="#60A5FA" />
-              <span>Legal drafting with proper court format</span>
-            </div>
+      <div className="hidden lg:flex flex-1 bg-primary border-l border-outline-variant p-16 flex-col justify-center relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10" style={{ backgroundImage: "linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+        
+        <div className="relative z-10 max-w-lg">
+          <span className="material-symbols-outlined text-[48px] text-on-primary mb-8">gavel</span>
+          <h2 className="font-display-lg text-[48px] text-on-primary leading-tight mb-6">Your AI Legal Research Partner</h2>
+          <p className="font-body-lg text-on-primary-container mb-12">Access India's most comprehensive AI-powered legal research platform with verified citations.</p>
+          
+          <div className="flex flex-col gap-6">
+            {[
+              "Constitution & 50,000+ SC judgments",
+              "Document risk analysis with AI",
+              "Anti-hallucination — no fabricated citations",
+              "Legal drafting with proper court format"
+            ].map((text, i) => (
+              <div key={i} className="flex items-center gap-4 text-on-primary-container">
+                <span className="material-symbols-outlined text-primary-container">check_circle</span>
+                <span className="font-body-md">{text}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
