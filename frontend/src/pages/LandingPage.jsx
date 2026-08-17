@@ -61,81 +61,204 @@ export default function LandingPage({ onNavigate }) {
       </nav>
 
       <main className="flex-1 mt-16">
-        {/* ── Hero ───────────────────────────────────── */}
-        <section className="border-b-2 border-primary px-4 md:px-margin pt-16 pb-20 flex flex-col items-center text-center bg-surface relative overflow-hidden">
-          {/* Subtle archival watermark / ledger lines */}
-          <div className="absolute inset-0 pointer-events-none opacity-40" style={{ backgroundImage: "linear-gradient(#e4e2e3 1px, transparent 1px), linear-gradient(90deg, #e4e2e3 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
-          
-          <div className="relative z-10 max-w-5xl flex flex-col items-center">
-            {/* Masthead Volume Bar */}
-            <div className="border-y border-primary/30 py-2 px-6 mb-8 flex items-center gap-4 text-xs font-label-sm text-secondary uppercase tracking-[0.2em]">
-              <span className="w-2 h-2 bg-primary"></span>
-              <span>GAZETTE ARCHIVE · CITATION ENGINE · NEW DELHI</span>
-              <span className="w-2 h-2 bg-primary"></span>
+        {/* ── Gazette Front-Page Masthead Hero ──────────────── */}
+        <section className="border-b-2 border-primary bg-surface relative overflow-hidden">
+          {/* Top Newspaper Nameplate Header */}
+          <div className="border-b-2 border-primary bg-surface py-6 px-4 md:px-margin text-center">
+            <div className="max-w-[1400px] mx-auto flex flex-col items-center">
+              <div className="font-label-sm text-[11px] text-secondary uppercase tracking-[0.25em] mb-2 flex items-center gap-3">
+                <span className="w-6 h-px bg-primary/40"></span>
+                <span>AUTHENTIC CITATION ARCHIVE & CASE RESEARCH SYSTEM</span>
+                <span className="w-6 h-px bg-primary/40"></span>
+              </div>
+              <h1 className="font-display-lg text-[36px] sm:text-[54px] md:text-[68px] leading-none text-primary uppercase tracking-[-0.02em] mb-3">
+                THE JURIS LEGAL GAZETTE
+              </h1>
+              <div className="w-full border-t border-b border-primary/30 py-1.5 flex flex-wrap justify-between items-center text-[11px] font-label-sm text-secondary uppercase tracking-widest px-2 gap-2">
+                <span>VOL. XXVI · ISSUE NO. 8</span>
+                <span className="hidden sm:inline">SUPREME COURT & HIGH COURTS OF INDIA</span>
+                <span>NEW DELHI · MON, AUG 18, 2026</span>
+                <span className="hidden md:inline">EDITION: PRACTITIONER</span>
+              </div>
             </div>
+          </div>
+
+          {/* 3-Column Newspaper Grid Layout */}
+          <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-0">
             
-            {/* Authoritative Editorial Headline */}
-            <h1 className="font-display-lg text-[40px] sm:text-[56px] md:text-[72px] leading-[1.05] text-primary tracking-[-0.03em] uppercase mb-6">
-              EVERY RATIO DECIDENDI.<br/>
-              <span className="font-serif italic font-normal text-secondary lowercase font-headline-lg">without the</span> UNVERIFIED CITATIONS.
-            </h1>
-            
-            <p className="font-body-lg text-[18px] md:text-[21px] text-on-surface-variant max-w-3xl mb-10 leading-relaxed">
-              An authoritative research intelligence built for the Indian Bar. Instant clause-by-clause contract analysis, precision precedent lookup, and court-compliant drafting across 50,000+ Supreme Court and High Court judgments.
-            </p>
-            
-            {/* Interactive Research Docket Preview Card */}
-            <div className="w-full max-w-3xl bg-parchment-mid border-2 border-primary p-4 sm:p-6 mb-8 text-left shadow-[6px_6px_0px_rgba(4,22,39,0.15)]">
-              <div className="flex items-center justify-between border-b border-primary/20 pb-3 mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 bg-primary"></span>
-                  <span className="font-label-sm text-xs text-primary font-bold uppercase tracking-widest">RESEARCH DOCKET · QUERY TERMINAL</span>
+            {/* ── Left Column: Statutory Digest (col-span-3) ── */}
+            <div className="lg:col-span-3 p-6 bg-parchment-mid border-b-2 lg:border-b-0 lg:border-r-2 border-primary flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between border-b-2 border-primary pb-2 mb-6">
+                  <h3 className="font-label-sm text-xs font-bold text-primary uppercase tracking-widest">
+                    I. STATUTORY DIGEST
+                  </h3>
+                  <span className="font-citation text-[10px] text-secondary bg-surface px-1.5 py-0.5 border border-primary/20">LIVE</span>
                 </div>
-                <span className="font-citation text-xs text-secondary bg-surface px-2 py-0.5 border border-primary/10">INDIAN LAW SCOPE ONLY</span>
+
+                <div className="space-y-6">
+                  <article className="group cursor-pointer" onClick={() => onNavigate("register")}>
+                    <div className="font-citation text-[11px] text-secondary mb-1">BNSS § 35 · PROCEDURAL COMPLIANCE</div>
+                    <h4 className="font-headline-md text-base text-primary font-bold leading-snug group-hover:underline">
+                      Mandatory Electronic Record Verification Guidelines
+                    </h4>
+                    <p className="font-body-md text-xs text-on-surface-variant mt-1.5 leading-relaxed">
+                      Standard operating procedures for digital evidence chain of custody across district magistrate courts.
+                    </p>
+                  </article>
+
+                  <div className="w-full h-px bg-primary/20"></div>
+
+                  <article className="group cursor-pointer" onClick={() => onNavigate("register")}>
+                    <div className="font-citation text-[11px] text-secondary mb-1">DPDP ACT 2023 · DATA REPOSITORIES</div>
+                    <h4 className="font-headline-md text-base text-primary font-bold leading-snug group-hover:underline">
+                      Fiduciary Standards for Law Vaults
+                    </h4>
+                    <p className="font-body-md text-xs text-on-surface-variant mt-1.5 leading-relaxed">
+                      Statutory encryption compliance thresholds for advocate chambers handling client disclosures.
+                    </p>
+                  </article>
+
+                  <div className="w-full h-px bg-primary/20"></div>
+
+                  <article className="group cursor-pointer" onClick={() => onNavigate("register")}>
+                    <div className="font-citation text-[11px] text-secondary mb-1">COMMERCIAL COURTS ACT · S. 12A</div>
+                    <h4 className="font-headline-md text-base text-primary font-bold leading-snug group-hover:underline">
+                      Pre-Institution Mediation Mandate
+                    </h4>
+                    <p className="font-body-md text-xs text-on-surface-variant mt-1.5 leading-relaxed">
+                      High Court reaffirmation on mandatory pre-suit mediation in suits not seeking urgent interim relief.
+                    </p>
+                  </article>
+                </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-1 bg-surface border border-primary/30 p-3.5 flex items-center gap-3">
-                  <span className="material-symbols-outlined text-secondary text-[20px]">search</span>
+              <div className="mt-8 pt-4 border-t border-primary/20 bg-surface p-3 border border-primary/20">
+                <div className="font-label-sm text-[10px] text-secondary uppercase tracking-widest mb-1">Statutory Coverage</div>
+                <div className="font-label-sm text-xs text-primary font-bold">200+ Central Acts & Codes Indexed</div>
+              </div>
+            </div>
+
+            {/* ── Center Column: Lead Story & Action Terminal (col-span-6) ── */}
+            <div className="lg:col-span-6 p-6 sm:p-8 md:p-10 bg-surface flex flex-col justify-between">
+              <div>
+                <div className="font-label-sm text-xs text-secondary uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-primary"></span>
+                  <span>LEAD DISPATCH · PRACTITIONER INTELLIGENCE</span>
+                </div>
+
+                <h2 className="font-display-lg text-[32px] sm:text-[44px] md:text-[52px] leading-[1.05] text-primary uppercase mb-4 tracking-[-0.02em]">
+                  COURT-VERIFIED LEGAL INTELLIGENCE FOR THE INDIAN ADVOCATE.
+                </h2>
+
+                <p className="font-headline-md text-[17px] sm:text-[20px] text-secondary italic mb-6 leading-relaxed">
+                  “Zero fabricated citations. Decades of Supreme Court ratios, clause-level risk inspection, and court-formatted petitions in seconds.”
+                </p>
+
+                {/* 2-Column Newspaper Article Prose */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-body-md text-on-surface-variant leading-relaxed pb-6 border-b border-primary/20">
+                  <p>
+                    <span className="font-display-lg text-2xl text-primary float-left mr-1.5 leading-none">E</span>ngineered specifically for the Indian courtroom, Juris cross-examines complex factual briefs against 50,000+ judgments and the Constitution with absolute fidelity to Bar Council standards.
+                  </p>
+                  <p>
+                    From urgent anticipatory bail applications under Section 438 CrPC to 60-page commercial lease risk diagnostics, receive immediate ratio decidendi with exact verified volume and page citations.
+                  </p>
+                </div>
+              </div>
+
+              {/* Research Terminal Action Card */}
+              <div className="mt-6 bg-parchment-deep border-2 border-primary p-4 sm:p-5 shadow-[4px_4px_0px_rgba(4,22,39,0.12)]">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="font-label-sm text-[11px] font-bold text-primary uppercase tracking-wider">
+                    ENTER LEGAL MATTER / STATUTORY QUERY
+                  </span>
+                  <span className="font-citation text-[10px] text-secondary">READY</span>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-2.5">
                   <input 
-                    type="text"
+                    type="text" 
                     readOnly
-                    value="Limitation for anticipatory bail under S.438 CrPC vs S.482 BNSS in economic offences..."
-                    className="w-full bg-transparent font-body-md text-sm text-primary focus:outline-none cursor-default"
+                    value="Draft anticipatory bail on grounds of parity and lack of custodial interrogation necessity..."
+                    className="flex-1 bg-surface border border-primary/40 p-3 font-body-md text-xs text-primary focus:outline-none cursor-default"
                   />
+                  <button 
+                    className="bg-primary text-on-primary font-label-sm text-xs uppercase tracking-widest px-6 py-3 border border-primary hover:bg-surface hover:text-primary transition-all font-bold shrink-0 flex items-center justify-center gap-2"
+                    onClick={() => onNavigate("register")}
+                  >
+                    RESEARCH DOCKET
+                    <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  </button>
                 </div>
-                <button 
-                  className="bg-primary text-on-primary font-label-sm text-xs uppercase tracking-widest px-6 py-3.5 border border-primary hover:bg-surface hover:text-primary transition-all shrink-0 flex items-center justify-center gap-2 font-bold"
-                  onClick={() => onNavigate("register")}
-                >
-                  RUN QUERY
-                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                </button>
-              </div>
 
-              {/* Sample Precedent Tags */}
-              <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-primary/10">
-                <span className="font-label-sm text-[11px] text-secondary uppercase tracking-wider mr-1">Active Precedents:</span>
-                <span className="font-citation text-xs text-primary bg-surface px-2.5 py-1 border border-primary/20 hover:border-primary transition-colors cursor-pointer" onClick={() => onNavigate("register")}>
-                  📜 Art. 21 (Right to Liberty)
-                </span>
-                <span className="font-citation text-xs text-primary bg-surface px-2.5 py-1 border border-primary/20 hover:border-primary transition-colors cursor-pointer" onClick={() => onNavigate("register")}>
-                  ⚖️ Gurbaksh Singh Sibbia (AIR 1980)
-                </span>
-                <span className="font-citation text-xs text-primary bg-surface px-2.5 py-1 border border-primary/20 hover:border-primary transition-colors cursor-pointer" onClick={() => onNavigate("register")}>
-                  📋 Sushila Aggarwal (2020)
-                </span>
+                <div className="flex flex-wrap gap-2 mt-3 pt-2.5 border-t border-primary/15 items-center">
+                  <span className="font-label-sm text-[10px] text-secondary uppercase">Quick Docket:</span>
+                  <button className="font-citation text-[11px] text-primary bg-surface px-2 py-0.5 border border-primary/20 hover:border-primary" onClick={() => onNavigate("register")}>
+                    S.438 Bail Grounds
+                  </button>
+                  <button className="font-citation text-[11px] text-primary bg-surface px-2 py-0.5 border border-primary/20 hover:border-primary" onClick={() => onNavigate("register")}>
+                    Art. 21 Habeas Corpus
+                  </button>
+                  <button className="font-citation text-[11px] text-primary bg-surface px-2 py-0.5 border border-primary/20 hover:border-primary" onClick={() => onNavigate("register")}>
+                    S.138 Cheque Notice
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Quick trust metrics line */}
-            <div className="flex flex-wrap justify-center items-center gap-6 font-label-sm text-xs text-secondary uppercase tracking-widest">
-              <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-primary text-[16px]">verified</span> 100% Verified Bare Acts</span>
-              <span className="hidden sm:inline text-primary/30">|</span>
-              <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-primary text-[16px]">gavel</span> 25 High Courts Indexed</span>
-              <span className="hidden sm:inline text-primary/30">|</span>
-              <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-primary text-[16px]">security</span> Anti-Hallucination Protocol</span>
+            {/* ── Right Column: Landmark Precedents (col-span-3) ── */}
+            <div className="lg:col-span-3 p-6 bg-parchment-mid border-t-2 lg:border-t-0 lg:border-l-2 border-primary flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between border-b-2 border-primary pb-2 mb-6">
+                  <h3 className="font-label-sm text-xs font-bold text-primary uppercase tracking-widest">
+                    II. LANDMARK PRECEDENTS
+                  </h3>
+                  <span className="font-citation text-[10px] text-secondary bg-surface px-1.5 py-0.5 border border-primary/20">INDEX</span>
+                </div>
+
+                <div className="space-y-6">
+                  <article className="group cursor-pointer" onClick={() => onNavigate("register")}>
+                    <div className="font-citation text-[11px] text-secondary mb-1">AIR 1973 SC 1461 · 13-JUDGE BENCH</div>
+                    <h4 className="font-headline-md text-base text-primary font-bold leading-snug group-hover:underline">
+                      Kesavananda Bharati v. State of Kerala
+                    </h4>
+                    <p className="font-body-md text-xs text-on-surface-variant mt-1.5 leading-relaxed">
+                      Established Basic Structure doctrine; parliamentary amendment powers under Art. 368 are not absolute.
+                    </p>
+                  </article>
+
+                  <div className="w-full h-px bg-primary/20"></div>
+
+                  <article className="group cursor-pointer" onClick={() => onNavigate("register")}>
+                    <div className="font-citation text-[11px] text-secondary mb-1">(2017) 10 SCC 1 · 9-JUDGE BENCH</div>
+                    <h4 className="font-headline-md text-base text-primary font-bold leading-snug group-hover:underline">
+                      K.S. Puttaswamy v. Union of India
+                    </h4>
+                    <p className="font-body-md text-xs text-on-surface-variant mt-1.5 leading-relaxed">
+                      Unanimous recognition of the Right to Privacy as an intrinsic fundamental right under Article 21.
+                    </p>
+                  </article>
+
+                  <div className="w-full h-px bg-primary/20"></div>
+
+                  <article className="group cursor-pointer" onClick={() => onNavigate("register")}>
+                    <div className="font-citation text-[11px] text-secondary mb-1">(2020) 5 SCC 1 · 5-JUDGE BENCH</div>
+                    <h4 className="font-headline-md text-base text-primary font-bold leading-snug group-hover:underline">
+                      Sushila Aggarwal v. State (NCT of Delhi)
+                    </h4>
+                    <p className="font-body-md text-xs text-on-surface-variant mt-1.5 leading-relaxed">
+                      Anticipatory bail protection should not be invariably limited to a fixed time frame.
+                    </p>
+                  </article>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-primary/20 bg-surface p-3 border border-primary/20">
+                <div className="font-label-sm text-[10px] text-secondary uppercase tracking-widest mb-1">Precedent Database</div>
+                <div className="font-label-sm text-xs text-primary font-bold">50,000+ Supreme Court & HC Rulings</div>
+              </div>
             </div>
+
           </div>
         </section>
 
