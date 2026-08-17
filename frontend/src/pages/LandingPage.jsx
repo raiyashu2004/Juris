@@ -62,38 +62,79 @@ export default function LandingPage({ onNavigate }) {
 
       <main className="flex-1 mt-16">
         {/* ── Hero ───────────────────────────────────── */}
-        <section className="border-b border-outline-variant px-margin py-24 flex flex-col items-center text-center bg-surface-container-lowest relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full border-t border-outline-variant" style={{ backgroundImage: "linear-gradient(#e2e2e2 1px, transparent 1px), linear-gradient(90deg, #e2e2e2 1px, transparent 1px)", backgroundSize: "40px 40px", opacity: 0.3 }} />
+        <section className="border-b-2 border-primary px-4 md:px-margin pt-16 pb-20 flex flex-col items-center text-center bg-surface relative overflow-hidden">
+          {/* Subtle archival watermark / ledger lines */}
+          <div className="absolute inset-0 pointer-events-none opacity-40" style={{ backgroundImage: "linear-gradient(#e4e2e3 1px, transparent 1px), linear-gradient(90deg, #e4e2e3 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
           
-          <div className="relative z-10 max-w-4xl flex flex-col items-center">
-            <span className="font-citation text-citation text-secondary border border-outline-variant bg-surface px-3 py-1 mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-[16px] text-primary">psychiatry</span>
-              Powered by Advanced AI · Trusted by 100+ Advocates
-            </span>
+          <div className="relative z-10 max-w-5xl flex flex-col items-center">
+            {/* Masthead Volume Bar */}
+            <div className="border-y border-primary/30 py-2 px-6 mb-8 flex items-center gap-4 text-xs font-label-sm text-secondary uppercase tracking-[0.2em]">
+              <span className="w-2 h-2 bg-primary"></span>
+              <span>GAZETTE ARCHIVE · CITATION ENGINE · NEW DELHI</span>
+              <span className="w-2 h-2 bg-primary"></span>
+            </div>
             
-            <h1 className="font-display-lg text-[64px] leading-tight text-primary mb-6">
-              India's Most Trusted<br/>
-              <span className="italic text-secondary">AI Legal Assistant</span>
+            {/* Authoritative Editorial Headline */}
+            <h1 className="font-display-lg text-[40px] sm:text-[56px] md:text-[72px] leading-[1.05] text-primary tracking-[-0.03em] uppercase mb-6">
+              EVERY RATIO DECIDENDI.<br/>
+              <span className="font-serif italic font-normal text-secondary lowercase font-headline-lg">without the</span> UNVERIFIED CITATIONS.
             </h1>
             
-            <p className="font-body-lg text-[20px] text-on-surface-variant max-w-3xl mb-12">
-              Research Indian law, analyze legal documents, find case precedents, and draft petitions — all with verified citations from the Constitution, Supreme Court, and High Court judgments.
+            <p className="font-body-lg text-[18px] md:text-[21px] text-on-surface-variant max-w-3xl mb-10 leading-relaxed">
+              An authoritative research intelligence built for the Indian Bar. Instant clause-by-clause contract analysis, precision precedent lookup, and court-compliant drafting across 50,000+ Supreme Court and High Court judgments.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button 
-                className="bg-primary text-on-primary font-label-sm text-[14px] uppercase tracking-wider px-8 py-4 border border-primary hover:bg-surface-container-highest hover:text-primary transition-colors flex items-center gap-2 justify-center"
-                onClick={() => onNavigate("register")}
-              >
-                Start Free Research
-                <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
-              </button>
-              <button 
-                className="bg-transparent text-primary font-label-sm text-[14px] uppercase tracking-wider px-8 py-4 border border-primary hover:bg-surface-container-low transition-colors flex items-center gap-2 justify-center"
-                onClick={() => onNavigate("login")}
-              >
-                Log In to Dashboard
-              </button>
+            {/* Interactive Research Docket Preview Card */}
+            <div className="w-full max-w-3xl bg-parchment-mid border-2 border-primary p-4 sm:p-6 mb-8 text-left shadow-[6px_6px_0px_rgba(4,22,39,0.15)]">
+              <div className="flex items-center justify-between border-b border-primary/20 pb-3 mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 bg-primary"></span>
+                  <span className="font-label-sm text-xs text-primary font-bold uppercase tracking-widest">RESEARCH DOCKET · QUERY TERMINAL</span>
+                </div>
+                <span className="font-citation text-xs text-secondary bg-surface px-2 py-0.5 border border-primary/10">INDIAN LAW SCOPE ONLY</span>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex-1 bg-surface border border-primary/30 p-3.5 flex items-center gap-3">
+                  <span className="material-symbols-outlined text-secondary text-[20px]">search</span>
+                  <input 
+                    type="text"
+                    readOnly
+                    value="Limitation for anticipatory bail under S.438 CrPC vs S.482 BNSS in economic offences..."
+                    className="w-full bg-transparent font-body-md text-sm text-primary focus:outline-none cursor-default"
+                  />
+                </div>
+                <button 
+                  className="bg-primary text-on-primary font-label-sm text-xs uppercase tracking-widest px-6 py-3.5 border border-primary hover:bg-surface hover:text-primary transition-all shrink-0 flex items-center justify-center gap-2 font-bold"
+                  onClick={() => onNavigate("register")}
+                >
+                  RUN QUERY
+                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </button>
+              </div>
+
+              {/* Sample Precedent Tags */}
+              <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-primary/10">
+                <span className="font-label-sm text-[11px] text-secondary uppercase tracking-wider mr-1">Active Precedents:</span>
+                <span className="font-citation text-xs text-primary bg-surface px-2.5 py-1 border border-primary/20 hover:border-primary transition-colors cursor-pointer" onClick={() => onNavigate("register")}>
+                  📜 Art. 21 (Right to Liberty)
+                </span>
+                <span className="font-citation text-xs text-primary bg-surface px-2.5 py-1 border border-primary/20 hover:border-primary transition-colors cursor-pointer" onClick={() => onNavigate("register")}>
+                  ⚖️ Gurbaksh Singh Sibbia (AIR 1980)
+                </span>
+                <span className="font-citation text-xs text-primary bg-surface px-2.5 py-1 border border-primary/20 hover:border-primary transition-colors cursor-pointer" onClick={() => onNavigate("register")}>
+                  📋 Sushila Aggarwal (2020)
+                </span>
+              </div>
+            </div>
+
+            {/* Quick trust metrics line */}
+            <div className="flex flex-wrap justify-center items-center gap-6 font-label-sm text-xs text-secondary uppercase tracking-widest">
+              <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-primary text-[16px]">verified</span> 100% Verified Bare Acts</span>
+              <span className="hidden sm:inline text-primary/30">|</span>
+              <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-primary text-[16px]">gavel</span> 25 High Courts Indexed</span>
+              <span className="hidden sm:inline text-primary/30">|</span>
+              <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-primary text-[16px]">security</span> Anti-Hallucination Protocol</span>
             </div>
           </div>
         </section>
