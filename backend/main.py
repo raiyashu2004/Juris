@@ -3,6 +3,9 @@ JurisAI — Indian Legal AI
 FastAPI Application Entrypoint
 """
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware

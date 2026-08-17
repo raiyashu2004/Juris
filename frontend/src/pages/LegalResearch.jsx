@@ -3,8 +3,8 @@ import { RefreshCw, BookOpen, Scale, FileText, ExternalLink, Clock, Sparkles, Al
 import ReactMarkdown from "react-markdown";
 import { callGemini, extractJSON, RESEARCH_FEED_PROMPT, ARTICLE_GENERATOR_PROMPT } from "../utils";
 
-const CACHE_KEY = "juris_research_feed";
-const CACHE_TIME = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+const CACHE_KEY = "juris_research_feed_v2";
+const CACHE_TIME = 1 * 60 * 60 * 1000; // 1 hour in milliseconds
 
 function FeedSkeleton() {
   return (
