@@ -41,15 +41,6 @@
 html, body, #root {
   height: 100%;
   width: 100%;
-  overflow: hidden;
-}
-
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: #F0F2F5;
-  color: #1E293B;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ── Scrollbar ────────────────────────────────────── */

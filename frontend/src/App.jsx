@@ -57,10 +57,10 @@ function AppContent() {
   const isFullScreenPage = page === "chat" || page === "doc";
 
   return (
-    <div className="bg-background text-on-background min-h-screen flex flex-col md:flex-row antialiased selection:bg-primary-container selection:text-on-primary">
+    <div className="bg-background text-on-background h-screen w-full flex flex-col md:flex-row antialiased selection:bg-primary-container selection:text-on-primary overflow-hidden">
       <Sidebar activePage={page} onNavigate={(p) => { setPage(p); setIsMobileMenuOpen(false); }} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
       
-      <main className="flex-1 md:ml-64 flex flex-col items-center min-h-screen overflow-x-hidden overflow-y-auto">
+      <main className="flex-1 md:ml-64 flex flex-col items-center h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
         <Header activePage={page} onNavigate={setPage} setIsMobileMenuOpen={setIsMobileMenuOpen} />
         
         {isFullScreenPage ? (
@@ -69,7 +69,7 @@ function AppContent() {
           </div>
         ) : (
           <div className="w-full flex-1 flex flex-col items-center p-0">
-            <div className="w-full max-w-[720px] px-margin py-12 md:py-24 flex-1">
+            <div className="w-full max-w-5xl px-4 md:px-margin py-8 md:py-12 flex-1">
               {renderPage()}
             </div>
             <footer className="w-full border-t border-outline-variant py-gutter px-margin flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto bg-surface mt-auto">
