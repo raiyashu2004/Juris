@@ -2,14 +2,14 @@ import { useAuth } from "../context/AuthContext";
 
 const NAV_ITEMS = [
   { id: "dashboard", label: "Home", icon: "home" },
-  { id: "chat", label: "Gavel", icon: "gavel" },
-  { id: "doc", label: "Scroll", icon: "description" },
-  { id: "research", label: "Ledger", icon: "menu_book" },
+  { id: "chat", label: "Chat with JurisAI", icon: "gavel" },
+  { id: "doc", label: "Document Analyzer", icon: "description" },
+  { id: "research", label: "Legal Research", icon: "menu_book" },
   { id: "cases", label: "Case Finder", icon: "manage_search" },
   { id: "draft", label: "Draft Generator", icon: "history_edu" },
   { id: "documents", label: "My Documents", icon: "folder" },
   { id: "templates", label: "Templates", icon: "file_copy" },
-  { id: "saved", label: "Archive", icon: "inventory_2" },
+  { id: "saved", label: "Saved Research", icon: "inventory_2" },
   { id: "settings", label: "Settings", icon: "settings" }
 ];
 
