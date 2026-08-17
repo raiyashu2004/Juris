@@ -57,7 +57,9 @@ export default function LegalResearch() {
       }
 
       // If no cache, expired, or forced -> call Gemini
-      const raw = await callGemini(RESEARCH_FEED_PROMPT, "Generate the latest Indian legal updates for the last 6 hours.");
+      const dateStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      const promptQuery = `Today is ${dateStr}. Generate timely, realistic, and up-to-date Indian legal research updates, recent Supreme Court / High Court decisions, and latest statutory notifications for ${dateStr}.`;
+      const raw = await callGemini(RESEARCH_FEED_PROMPT, promptQuery);
       const data = extractJSON(raw);
       
       const cacheObj = {
