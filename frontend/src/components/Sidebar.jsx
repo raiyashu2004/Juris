@@ -5,7 +5,12 @@ const NAV_ITEMS = [
   { id: "chat", label: "Gavel", icon: "gavel" },
   { id: "doc", label: "Scroll", icon: "description" },
   { id: "research", label: "Ledger", icon: "menu_book" },
-  { id: "saved", label: "Archive", icon: "inventory_2" }
+  { id: "cases", label: "Case Finder", icon: "manage_search" },
+  { id: "draft", label: "Draft Generator", icon: "history_edu" },
+  { id: "documents", label: "My Documents", icon: "folder" },
+  { id: "templates", label: "Templates", icon: "file_copy" },
+  { id: "saved", label: "Archive", icon: "inventory_2" },
+  { id: "settings", label: "Settings", icon: "settings" }
 ];
 
 export default function Sidebar({ activePage, onNavigate, isMobileMenuOpen, setIsMobileMenuOpen }) {
@@ -35,7 +40,7 @@ export default function Sidebar({ activePage, onNavigate, isMobileMenuOpen, setI
           New Draft
         </button>
         
-        <ul className="flex flex-col space-y-4">
+        <ul className="flex flex-col space-y-1 overflow-y-auto custom-scrollbar mb-4">
           {NAV_ITEMS.map((item) => {
             const isActive = activePage === item.id;
             return (
