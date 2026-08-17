@@ -60,7 +60,7 @@ function AppContent() {
     <div className="bg-background text-on-background min-h-screen flex flex-col md:flex-row antialiased selection:bg-primary-container selection:text-on-primary">
       <Sidebar activePage={page} onNavigate={(p) => { setPage(p); setIsMobileMenuOpen(false); }} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
       
-      <main className="flex-1 md:ml-64 flex flex-col items-center min-h-screen overflow-x-hidden">
+      <main className="flex-1 md:ml-64 flex flex-col items-center min-h-screen overflow-x-hidden overflow-y-auto">
         <Header activePage={page} onNavigate={setPage} setIsMobileMenuOpen={setIsMobileMenuOpen} />
         
         {isFullScreenPage ? (
