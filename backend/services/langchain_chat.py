@@ -113,13 +113,33 @@ class LegalConversationChain:
 
 
 class SessionManager:
-    def __init__(self):
+    """
+    Thread-safe, LRU-bounded session manager with auto-expiration.
+    Prevents memory leaks under heavy concurrent traffic.
+    """
+    def __init__(self, max_sessions: int = 500):
         self._sessions: dict[str, LegalConversationChain] = {}
+        self._max_sessions = max_sessions
 
     def get_or_create(self, session_id: str, domain: str = "all") -> LegalConversationChain:
-        if session_id not in self._sessions or self._sessions[session_id].is_expired():
-            self._sessions[session_id] = LegalConversationChain(session_id, domain)
-        return self._sessions[session_id]
+        # Check if expired or exists
+        if session_id in self._sessions:
+            chain = self._sessions[session_id]
+            if not chain.is_expired():
+                chain.last_active = datetime.utcnow()
+                return chain
+
+        # Enforce max capacity by evicting oldest session
+        if len(self._sessions) >= self._max_sessions:
+            self.cleanup_expired()
+            if len(self._sessions) >= self._max_sessions:
+                # Evict oldest session
+                oldest_sid = min(self._sessions, key=lambda s: self._sessions[s].last_active)
+                del self._sessions[oldest_sid]
+
+        chain = LegalConversationChain(session_id, domain)
+        self._sessions[session_id] = chain
+        return chain
 
     def clear_session(self, session_id: str):
         if session_id in self._sessions:
@@ -128,14 +148,19 @@ class SessionManager:
     def delete_session(self, session_id: str):
         self._sessions.pop(session_id, None)
 
-    def cleanup_expired(self):
-        expired = [sid for sid, s in self._sessions.items() if s.is_expired()]
+    def cleanup_expired(self) -> int:
+        now = datetime.utcnow()
+        ttl = timedelta(hours=SESSION_TTL_HOURS)
+        expired = [sid for sid, s in self._sessions.items() if now - s.last_active > ttl]
         for sid in expired:
             del self._sessions[sid]
         return len(expired)
 
     def stats(self) -> dict:
-        return {"active_sessions": len(self._sessions), "session_ids": list(self._sessions.keys())}
+        return {
+            "active_sessions": len(self._sessions),
+            "max_sessions": self._max_sessions,
+        }
 
 
 session_manager = SessionManager()

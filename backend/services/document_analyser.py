@@ -16,6 +16,7 @@ from typing import Optional
 from dataclasses import dataclass
 from io import BytesIO
 import re
+import asyncio
 
 from services.rag import RAGPipeline
 from services.llm import LLMService
@@ -172,15 +173,13 @@ class DocumentAnalyser:
             confidence=0.92 if rag_result.sources else 0.75,
         )
 
-    # ─── Text extraction ─────────────────
-
     async def _extract_text(self, file_bytes: bytes, filename: str) -> str:
         ext = filename.lower().split(".")[-1]
 
         if ext == "pdf":
-            return self._extract_pdf(file_bytes)
+            return await asyncio.to_thread(self._extract_pdf, file_bytes)
         elif ext in ("doc", "docx"):
-            return self._extract_docx(file_bytes)
+            return await asyncio.to_thread(self._extract_docx, file_bytes)
         elif ext in ("txt",):
             return file_bytes.decode("utf-8", errors="ignore")
         elif ext in ("png", "jpg", "jpeg", "tiff"):
@@ -189,23 +188,28 @@ class DocumentAnalyser:
             raise ValueError(f"Unsupported file format: .{ext}")
 
     def _extract_pdf(self, file_bytes: bytes) -> str:
-        """Extract text from PDF. Falls back to OCR if text layer is absent."""
+        """Extract text from PDF in worker thread with page ceiling."""
         doc = fitz.open(stream=file_bytes, filetype="pdf")
         text_pages = []
+        max_pages = 50  # Cap maximum pages to prevent resource exhaustion
 
-        for page in doc:
+        for idx, page in enumerate(doc):
+            if idx >= max_pages:
+                text_pages.append(f"\n[... Document exceeded {max_pages} page limit. Analysis performed on first {max_pages} pages ...]\n")
+                break
             text = page.get_text("text")
             if text.strip():
                 text_pages.append(text)
             else:
-                # Scanned page
                 text_pages.append("\n[Scanned image page skipped. OCR not supported on this server.]\n")
 
         return "\n\n".join(text_pages)
 
     def _extract_docx(self, file_bytes: bytes) -> str:
+        """Extract text from DOCX in worker thread."""
         doc = DocxDocument(BytesIO(file_bytes))
-        return "\n".join(p.text for p in doc.paragraphs if p.text.strip())
+        paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
+        return "\n".join(paragraphs[:1000])  # Cap at 1000 paragraphs
 
     # ─── Document type detection ─────────
 

@@ -1,16 +1,19 @@
 """
-Documents Router — Legal Document Analyser endpoints.
+Documents Router — Legal Document Analyser endpoints with file signature verification.
 """
 
-from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, status
 from pydantic import BaseModel
 from typing import Optional
 import uuid
+import logging
 from datetime import datetime
 
 from services.document_analyser import DocumentAnalyser
 from utils.auth import get_current_user
+from utils.security import validate_file_signature, sanitize_filename, rate_limit_dependency
 
+logger = logging.getLogger("juris.documents")
 router = APIRouter()
 analyser = DocumentAnalyser()
 
@@ -47,48 +50,62 @@ class AnalysisResponse(BaseModel):
     analysed_at: str
 
 
-@router.post("/analyse", response_model=AnalysisResponse)
+@router.post(
+    "/analyse",
+    response_model=AnalysisResponse,
+    dependencies=[Depends(rate_limit_dependency(max_requests=20, window_seconds=60))]
+)
 async def analyse_document(
     file: UploadFile = File(...),
     user=Depends(get_current_user),
 ):
     """
-    Upload a legal document (PDF, DOCX, TXT, image) for analysis.
-
-    Returns:
-    - Document type detection
-    - Plain-English summary
-    - Risk flags with legal basis (Indian law)
-    - Relevant past case law
-    - Missing clauses suggestions
+    Upload a legal document (PDF, DOCX, TXT) for analysis.
+    Performs deep magic byte validation and safe parsing.
     """
+    safe_name = sanitize_filename(file.filename or "uploaded_document")
 
-    # Validate file type
-    if file.content_type not in ALLOWED_TYPES:
+    # Validate declared MIME type
+    if file.content_type and file.content_type not in ALLOWED_TYPES:
         raise HTTPException(
-            400,
-            f"Unsupported file type: {file.content_type}. "
-            "Supported: PDF, DOCX, TXT, PNG, JPG, TIFF"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Unsupported content-type: {file.content_type}. Supported: PDF, DOCX, TXT"
         )
 
-    # Read and validate file size
+    # Read bytes safely
     file_bytes = await file.read()
     if len(file_bytes) > MAX_FILE_SIZE:
-        raise HTTPException(400, "File too large. Maximum size is 20 MB.")
-    if len(file_bytes) < 100:
-        raise HTTPException(400, "File appears to be empty.")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="File exceeds maximum allowed size of 20 MB."
+        )
+    if len(file_bytes) < 50:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="File appears to be empty or corrupted."
+        )
+
+    # Magic byte file signature verification
+    try:
+        validate_file_signature(file_bytes, safe_name)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
     # Run analysis
     try:
-        result = await analyser.analyse(file_bytes, file.filename)
+        result = await analyser.analyse(file_bytes, safe_name)
     except ValueError as e:
-        raise HTTPException(422, str(e))
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
     except Exception as e:
-        raise HTTPException(500, f"Analysis failed: {str(e)}")
+        logger.error(f"Document analysis failed for {safe_name}: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Document analysis could not be completed. Please ensure the document is not password-protected."
+        )
 
     return AnalysisResponse(
         document_id=str(uuid.uuid4()),
-        filename=file.filename,
+        filename=safe_name,
         doc_type=result.doc_type,
         summary=result.summary,
         parties=result.parties,

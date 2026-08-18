@@ -1,26 +1,27 @@
-"""Auth router — registration and login."""
+"""Auth router — registration and login with rate limiting and password security."""
 
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, EmailStr
+from fastapi import APIRouter, HTTPException, Depends, status
+from pydantic import BaseModel, EmailStr, Field
 from utils.auth import hash_password, verify_password, create_access_token
+from utils.security import rate_limit_dependency
 import uuid
 
 router = APIRouter()
 
-# In-memory store for demo — replace with DB in production
+# In-memory store for demo
 _users: dict = {}
 
 
 class RegisterRequest(BaseModel):
-    name: str
+    name: str = Field(..., min_length=2, max_length=100)
     email: EmailStr
-    password: str
-    bar_number: str | None = None
+    password: str = Field(..., min_length=8, max_length=128)
+    bar_number: str | None = Field(None, max_length=50)
 
 
 class LoginRequest(BaseModel):
     email: EmailStr
-    password: str
+    password: str = Field(..., min_length=1, max_length=128)
 
 
 class TokenResponse(BaseModel):
@@ -29,10 +30,17 @@ class TokenResponse(BaseModel):
     user: dict
 
 
-@router.post("/register", response_model=TokenResponse)
+@router.post(
+    "/register",
+    response_model=TokenResponse,
+    dependencies=[Depends(rate_limit_dependency(max_requests=10, window_seconds=60))]
+)
 async def register(req: RegisterRequest):
     if req.email in _users:
-        raise HTTPException(400, "Email already registered")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered."
+        )
     user_id = str(uuid.uuid4())
     _users[req.email] = {
         "id": user_id,
@@ -48,11 +56,18 @@ async def register(req: RegisterRequest):
     )
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post(
+    "/login",
+    response_model=TokenResponse,
+    dependencies=[Depends(rate_limit_dependency(max_requests=10, window_seconds=60))]
+)
 async def login(req: LoginRequest):
     user = _users.get(req.email)
     if not user or not verify_password(req.password, user["password_hash"]):
-        raise HTTPException(401, "Invalid credentials")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password."
+        )
     token = create_access_token(user["id"], req.email)
     return TokenResponse(
         access_token=token,
