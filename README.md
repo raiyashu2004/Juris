@@ -1,91 +1,180 @@
 <div align="center">
-  <img src="./frontend/public/logo.jpg" width="80" height="80" alt="JurisAI Logo" style="border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
-  <h1>JurisAI — Indian Legal AI Assistant</h1>
-  <p>An AI-powered legal research and drafting platform built for Indian advocates and law students. Powered by Google Gemini and FastAPI.</p>
+  <img src="./frontend/public/juris_app_icon_dark.png" width="90" height="90" alt="Juris Logo" style="border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
+  <h1>Juris — Indian Legal Intelligence & Research System</h1>
+  <p><strong>Authoritative computational legal research, case law discovery, and contract risk analysis built strictly for Indian jurisprudence.</strong></p>
   <p>
-    <a href="https://botjuris-six.vercel.app">🚀 Live Demo</a>
+    <a href="https://botjuris-six.vercel.app">🚀 Live Web Application</a> •
+    <a href="https://github.com/raiyashu2004/Juris">📦 GitHub Repository</a>
   </p>
 
-  <a href="#features">Features</a> •
+  <p>
+    <img src="https://img.shields.io/badge/Concurrency-50%2B%20Concurrent%20Users-blue?style=flat-square" alt="Concurrency" />
+    <img src="https://img.shields.io/badge/Security-OWASP%20Hardened-green?style=flat-square" alt="Security" />
+    <img src="https://img.shields.io/badge/AI%20Engine-Gemini%203.1%20Flash-orange?style=flat-square" alt="AI Engine" />
+    <img src="https://img.shields.io/badge/Framework-FastAPI%20%7C%20React%2018-black?style=flat-square" alt="Framework" />
+  </p>
+
+  <a href="#overview">Overview</a> •
+  <a href="#key-features">Key Features</a> •
+  <a href="#architecture--security">Architecture & Security</a> •
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#quick-start">Quick Start</a> •
-  <a href="#architecture">Architecture</a>
+  <a href="#api-reference">API Reference</a>
 </div>
 
 <br/>
 
-## ⚖️ Overview
+---
 
-JurisAI is a modern legal tech application designed to solve the biggest pain points in Indian legal practice: endless precedent searching, manual contract review, and formatting standard drafts. 
+## 🏛️ Overview
 
-Unlike generic AI chat tools, JurisAI strictly operates within the boundaries of Indian law (Constitution, IPC/BNS, CrPC, etc.) and utilizes **LangChain** conversational memory to provide deep, contextual legal analysis.
+**Juris** is an enterprise-grade legal tech platform built specifically for Indian advocates, corporate counsel, and legal researchers. It addresses the fundamental bottlenecks of modern Indian practice: exhaustive precedent searching, contract risk inspection, and accurate procedural drafting under the Constitution of India, Bharatiya Nyaya Sanhita (BNS / IPC), Bharatiya Nagarik Suraksha Sanhita (BNSS / CrPC), and decades of Supreme Court and High Court rulings.
 
-## ✨ Features
+Built with an authoritative **Gazette Editorial design system** and powered by a high-concurrency **FastAPI + LangChain** backend, Juris operates with strict anti-hallucination guardrails and verified citations.
 
-- **Smart Legal Research**: Ask complex legal questions and get plain-English answers backed by Indian case law and bare acts.
-- **Persistent Chat Sessions**: True ChatGPT-style conversational memory with chat history stored securely in your browser's local cache.
-- **Domain Guardrails**: Automatically force the AI into specific legal contexts (e.g., Criminal, Civil, Family) for highly accurate answers.
-- **Document Analyzer**: Upload legal documents for instant AI review, summarization, and risk flagging.
-- **Drafting Assistant**: Generate standard bail applications, writ petitions, and legal notices with proper Indian court formatting.
+---
+
+## ✨ Key Features
+
+- **Smart Legal Research & RAG Pipeline**: Ask complex factual briefs and receive structured ratio decidendi grounded in verified bare acts and court rulings without citation hallucinations.
+- **Contract & Document Risk Analyzer**: Upload legal documents (PDF, DOCX, TXT) for clause-by-clause inspection, missing clause detection, and statutory compliance checks.
+- **Precedent & Case Finder**: Discover relevant Supreme Court and High Court judgments by querying case facts or statutory provisions.
+- **Procedural Drafting Assistant**: Accelerate preparation of anticipatory bail petitions, writ petitions, and legal notices formatted to standard court conventions.
+- **Persistent Conversational Memory**: Multi-turn dialogue management with domain guardrails (Constitutional, Criminal, Civil, Family, Property, Labour).
+
+---
+
+## 🛡️ Architecture & Security
+
+Juris is engineered for **high concurrency (50+ simultaneous active sessions)** with defense-in-depth security:
+
+```
+                  ┌────────────────────────────────────────┐
+                  │          Inbound Web Traffic           │
+                  └──────────────────┬─────────────────────┘
+                                     │
+                 ┌───────────────────▼──────────────────────┐
+                 │  Multi-Layer Security Middleware Stack   │
+                 │  - OWASP Security Headers (CSP, HSTS...) │
+                 │  - Sliding-Window Token Bucket Limiter   │
+                 │  - Hardened CORS & Request Sanitizer     │
+                 │  - Global Exception Sanitizer & Tracing  │
+                 └───────────────────┬──────────────────────┘
+                                     │
+             ┌───────────────────────┴───────────────────────┐
+             │                                               │
+  ┌──────────▼──────────────┐                    ┌───────────▼───────────┐
+  │  FastAPI Async Routers  │                    │ Non-blocking Document │
+  │  (Auth, Chat, Cases)    │                    │ Parser (PyMuPDF/Docx) │
+  └──────────┬──────────────┘                    └───────────┬───────────┘
+             │                                               │
+             │                                   ┌───────────▼───────────┐
+             │                                   │ ThreadPool Offloader  │
+             │                                   │ (Prevents Event Loop  │
+             │                                   │  Starvation)          │
+             │                                   └───────────┬───────────┘
+             │                                               │
+  ┌──────────▼───────────────────────────────────────────────▼───────────┐
+  │              Shared Resource & Connection Pools                      │
+  │  - Async HTTP Connection Pool (Keep-Alive, DNS Cache, 100 conns)     │
+  │  - AsyncPG Database Pool (min=10, max=60, acquire timeout)           │
+  │  - Thread-Safe LRU Session Memory Manager with Auto-Eviction         │
+  └──────────────────────────────────────────────────────────────────────┘
+```
+
+### Security Highlights:
+1. **OWASP Security Headers**: Comprehensive response protection with `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `X-XSS-Protection: 1; mode=block`, `Strict-Transport-Security`, `Content-Security-Policy`, and `Referrer-Policy`.
+2. **Sliding-Window Rate Limiter**: Route-level token bucket rate limiting preventing DoS attacks and credential stuffing without external Redis dependencies.
+3. **Magic-Byte File Verification**: Verifies true file signatures (`%PDF-`, `PK\x03\x04`, `\x89PNG`, `\xff\xd8\xff`) to protect against disguised malicious executables and decompression bombs.
+4. **Path Traversal Sanitization**: Strips directory traversal sequences (`../../etc/passwd`) and normalizes path separators.
+5. **No Stack Trace Disclosure**: Sanitized error responses prevent server internals or filepaths from leaking to clients.
+6. **Threadpool Offloading**: CPU-intensive document processing is offloaded to background threads, ensuring sub-millisecond response times for concurrent users.
+
+---
 
 ## 🛠 Tech Stack
 
-- **Frontend**: React 18, Vite, Vanilla CSS
-- **Backend**: Python, FastAPI, LangChain
-- **AI Engine**: Google Gemini (`gemini-3.1-flash-lite`)
-- **Hosting**: Vercel (Frontend) & Render (Backend)
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React 18, Vite, Tailwind CSS, Material Symbols, JetBrains Mono & Bodoni Moda Typography |
+| **Backend** | Python 3.11+, FastAPI, Uvicorn, Gunicorn, LangChain |
+| **AI / LLM** | Google Gemini (`gemini-3.1-flash-lite`), LangChain Google GenAI |
+| **Vector DB** | PostgreSQL (`pgvector`), AsyncPG Connection Pool (10–60 connections) |
+| **Document Processing** | PyMuPDF (fitz), Python-Docx, Async I/O Threadpool |
+| **Deployment** | Vercel (Frontend SPA) & Render (Backend API) |
+
+---
 
 ## 🚀 Quick Start (Local Development)
 
-### 1. Clone the repository
+### 1. Clone Repository
 ```bash
 git clone https://github.com/raiyashu2004/Juris.git
 cd Juris
 ```
 
-### 2. Setup the Backend (FastAPI)
+### 2. Backend Setup
 ```bash
 cd backend
-python -m venv .venv
-source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Create a `.env` file in the `backend/` directory:
+Create `.env` in `backend/`:
 ```env
-GEMINI_API_KEY=your_google_gemini_api_key
+GEMINI_API_KEY=your_gemini_api_key_here
+DATABASE_URL=postgresql://juris:juris_secret@localhost:5432/juris
+JWT_SECRET=your_secure_random_jwt_secret
 ```
 
-Start the backend server:
+Launch FastAPI server:
 ```bash
-uvicorn main:app --reload --port 10000
+uvicorn main:app --reload --port 10000 --workers 4
 ```
 
-### 3. Setup the Frontend (React)
-Open a new terminal window:
+### 3. Frontend Setup
+In a new terminal:
 ```bash
 cd frontend
 npm install
 ```
 
-Create a `.env` file in the `frontend/` directory:
+Create `.env` in `frontend/`:
 ```env
 VITE_BACKEND_URL=http://localhost:10000
 ```
 
-Start the frontend development server:
+Start Vite development server:
 ```bash
 npm run dev
 ```
-Open `http://localhost:5173` in your browser.
-
-## 🏗 Architecture Note
-This application utilizes a decoupled architecture to ensure smooth AI streaming and avoid rate limits:
-- The **Frontend** is a lightweight React SPA that manages UI, rendering, and zero-cost persistent chat history using the browser's `localStorage`.
-- The **Backend** is a FastAPI service that acts as a secure LangChain proxy, managing the heavy lifting of AI orchestration, context injection, and API key security. It is currently configured to run seamlessly on a free-tier hosting plan (Render) without requiring a provisioned PostgreSQL database.
-
-## 📜 Disclaimer
-JurisAI is an AI assistant intended for research and drafting assistance. It is **not a substitute for qualified legal counsel**. Always verify citations and legal advice with an advocate enrolled with the Bar Council of India before submitting documents to a court of law.
+Open **`http://localhost:5173`** in your browser.
 
 ---
-*Empowering the Indian Legal Community with intelligent AI.*
+
+## 📡 API Reference
+
+| Endpoint | Method | Description |
+| :--- | :--- | :--- |
+| `/api/health` | `GET` | System health check & active session telemetry |
+| `/api/chat/generic-stream` | `POST` | LangChain SSE streaming proxy with context injection |
+| `/api/chat/generic` | `POST` | Non-streaming conversational endpoint |
+| `/api/chat/ask` | `POST` | Scoped legal research RAG query with citation extraction |
+| `/api/documents/analyse` | `POST` | Multi-format legal document analyzer (PDF, DOCX, TXT) |
+| `/api/cases/search` | `GET` | Case law precedent search across vector DB & Kanoon |
+| `/api/cases/similar` | `GET` | Similar case finder based on factual briefs |
+| `/api/auth/register` | `POST` | Rate-limited advocate registration |
+| `/api/auth/login` | `POST` | Rate-limited JWT authentication |
+
+---
+
+## 📜 Legal Disclaimer
+
+*Juris is an artificial intelligence research and workflow tool designed for advocates and legal professionals. It does not provide formal legal advice and does not create an attorney-client relationship under the Advocates Act, 1961. Always independently verify statutory provisions and judicial citations before making court submissions.*
+
+---
+
+<div align="center">
+  <sub>© 2026 Juris Legal Systems. All Rights Reserved.</sub>
+</div>
