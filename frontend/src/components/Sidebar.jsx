@@ -27,9 +27,16 @@ export default function Sidebar({ activePage, onNavigate, isMobileMenuOpen, setI
       )}
 
       <nav className={`${isMobileMenuOpen ? "flex" : "hidden"} md:flex h-full w-64 flex-col border-r-2 border-primary bg-parchment-mid fixed left-0 top-0 z-50 py-8 px-4 transition-transform duration-300 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
-        <div className="mb-12">
-          <h1 className="font-headline-lg text-headline-lg text-primary uppercase tracking-tight">Juris</h1>
-          <p className="font-label-sm text-label-sm text-secondary mt-1">Legal Research Suite</p>
+        <div className="mb-10 flex items-center gap-3 cursor-pointer select-none" onClick={() => onNavigate("dashboard")}>
+          <img 
+            src="/juris_app_icon_dark.png" 
+            alt="Juris Logo" 
+            className="w-10 h-10 object-contain rounded-md shadow-sm border border-primary/20"
+          />
+          <div>
+            <h1 className="font-headline-lg text-[22px] text-primary uppercase tracking-tight font-bold leading-none">Juris</h1>
+            <p className="font-label-sm text-[11px] text-secondary mt-1 tracking-wider uppercase">Legal Suite</p>
+          </div>
         </div>
         
         <button 

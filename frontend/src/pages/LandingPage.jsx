@@ -32,31 +32,40 @@ export default function LandingPage({ onNavigate }) {
   return (
     <div className="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex flex-col">
       {/* ── Navbar ──────────────────────────────────── */}
-      <nav className="fixed top-0 left-0 right-0 h-16 border-b border-outline-variant bg-surface-container-lowest flex justify-between items-center px-lg z-50">
-        <div className="flex items-center gap-md">
-          <h1 className="font-display-lg text-[24px] text-primary tracking-tight">Juris</h1>
-          <span className="font-label-sm text-[10px] text-secondary uppercase tracking-widest border border-outline-variant px-2 py-0.5 hidden md:block">Legal Interface</span>
-        </div>
-        
-        <div className="hidden md:flex items-center gap-xl font-label-sm text-label-sm uppercase tracking-wider text-secondary">
-          <a href="#features" className="hover:text-primary transition-colors">Features</a>
-          <a href="#how-it-works" className="hover:text-primary transition-colors">How It Works</a>
-          <a href="#testimonials" className="hover:text-primary transition-colors">Testimonials</a>
-        </div>
+      <nav className="fixed top-0 left-0 right-0 h-16 border-b border-outline-variant bg-surface-container-lowest/95 backdrop-blur-md z-50">
+        <div className="max-w-[1400px] h-full mx-auto px-4 sm:px-6 md:px-8 lg:px-12 flex justify-between items-center">
+          <div 
+            className="flex items-center gap-3 cursor-pointer select-none group"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            <img 
+              src="/juris_app_icon_dark.png" 
+              alt="Juris Logo" 
+              className="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-md shadow-sm border border-primary/20 transition-transform group-hover:scale-105"
+            />
+            <h1 className="font-display-lg text-[24px] sm:text-[26px] text-primary tracking-tight font-bold">Juris</h1>
+          </div>
+          
+          <div className="hidden md:flex items-center gap-8 lg:gap-10 font-label-sm text-xs uppercase tracking-widest text-secondary font-medium">
+            <a href="#features" className="hover:text-primary transition-colors py-1">Features</a>
+            <a href="#how-it-works" className="hover:text-primary transition-colors py-1">How It Works</a>
+            <a href="#testimonials" className="hover:text-primary transition-colors py-1">Testimonials</a>
+          </div>
 
-        <div className="flex items-center gap-4">
-          <button 
-            className="font-label-sm text-label-sm text-secondary uppercase tracking-wider hover:text-primary transition-colors" 
-            onClick={() => onNavigate("login")}
-          >
-            Log In
-          </button>
-          <button 
-            className="bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-wider px-4 py-2 border border-primary hover:bg-surface-container-highest hover:text-primary transition-colors flex items-center gap-2"
-            onClick={() => onNavigate("register")}
-          >
-            Get Started <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-          </button>
+          <div className="flex items-center gap-3 sm:gap-4">
+            <button 
+              className="font-label-sm text-xs text-secondary uppercase tracking-wider hover:text-primary transition-colors px-2 sm:px-3 py-2 cursor-pointer font-medium" 
+              onClick={() => onNavigate("login")}
+            >
+              Log In
+            </button>
+            <button 
+              className="bg-primary text-on-primary font-label-sm text-xs uppercase tracking-wider px-3.5 sm:px-4 py-2 border border-primary hover:bg-surface-container-highest hover:text-primary transition-all duration-200 flex items-center gap-1.5 sm:gap-2 cursor-pointer shadow-sm active:translate-y-px font-medium"
+              onClick={() => onNavigate("register")}
+            >
+              Get Started <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -429,9 +438,16 @@ export default function LandingPage({ onNavigate }) {
       <footer className="bg-surface border-t-2 border-primary py-12 px-4 md:px-margin">
         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between gap-12">
           <div className="max-w-md">
-            <h1 className="font-display-lg text-[28px] text-primary uppercase tracking-tight mb-3">
-              THE JURIS LEGAL GAZETTE
-            </h1>
+            <div className="flex items-center gap-3 mb-3">
+              <img 
+                src="/juris_app_icon_dark.png" 
+                alt="Juris Logo" 
+                className="w-8 h-8 object-contain rounded-md border border-primary/30"
+              />
+              <h2 className="font-display-lg text-[24px] sm:text-[26px] text-primary uppercase tracking-tight">
+                THE JURIS LEGAL GAZETTE
+              </h2>
+            </div>
             <p className="font-body-md text-xs text-secondary leading-relaxed mb-4">
               An authoritative computational legal research system for Indian jurisprudence. Built strictly on verified Supreme Court judgments, High Court precedents, and Central bare acts.
             </p>

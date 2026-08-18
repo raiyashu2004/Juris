@@ -97,11 +97,13 @@ export default function RegisterPage({ onNavigate }) {
       <div className="flex-1 flex flex-col p-8 md:p-16 bg-surface-container-lowest overflow-y-auto">
         <div className="w-full max-w-xl mx-auto">
           {/* Logo */}
-          <div className="flex items-center gap-3 mb-12 cursor-pointer" onClick={() => onNavigate("landing")}>
-            <div className="h-10 w-10 bg-primary flex items-center justify-center border border-outline-variant">
-              <span className="font-display-lg text-on-primary text-xl tracking-tighter">J</span>
-            </div>
-            <span className="font-display-lg text-[24px] text-primary tracking-tight">Juris</span>
+          <div className="flex items-center gap-3 mb-12 cursor-pointer group" onClick={() => onNavigate("landing")}>
+            <img 
+              src="/juris_app_icon_dark.png" 
+              alt="Juris Logo" 
+              className="w-10 h-10 object-contain rounded-md shadow-sm border border-primary/20 transition-transform group-hover:scale-105"
+            />
+            <span className="font-display-lg text-[26px] text-primary tracking-tight font-bold">Juris</span>
           </div>
 
           <h1 className="font-headline-lg text-[32px] text-primary mb-2">Create your account</h1>
