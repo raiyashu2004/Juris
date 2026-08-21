@@ -1,4 +1,121 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+const PROTOCOL_DOCUMENTS = {
+  "citation-accuracy": {
+    badge: "PROTOCOL § 101 · CITATION VERIFICATION",
+    title: "Official Law Reporter & Citation Accuracy Standard",
+    subtitle: "Dual-Stage Judicial Verification Architecture for Supreme Court & High Court Precedents",
+    sections: [
+      {
+        heading: "1. Primary Law Verification Guarantee",
+        content: "Every precedent returned by Juris is strictly cross-referenced against authoritative Indian case law repositories including Supreme Court Reports (SCR), Supreme Court Cases (SCC), All India Reporter (AIR), and official High Court e-filing repositories. Volume, case title, judgment date, and coram details are verified before citation generation."
+      },
+      {
+        heading: "2. Zero-Hallucination Policy",
+        content: "If an algorithmic search does not produce a verifiable case number, citation, and bench judgment, the system explicitly disclaims rather than generating hallucinated citations. We prioritize practitioner trust above speculative responses."
+      },
+      {
+        heading: "3. Ratio Decidendi Extraction",
+        content: "Our vector parsing isolates operative rulings and ratio decidendi from incidental commentary (obiter dicta), giving practitioners courtroom-ready citations with bench strength and overruling history."
+      }
+    ]
+  },
+  "bare-acts-scope": {
+    badge: "PROTOCOL § 102 · STATUTORY REPOSITORY",
+    title: "Bare Acts & Central Legislative Scope",
+    subtitle: "Comprehensive Coverage Across 200+ Central Acts, Codes, and State Amendments",
+    sections: [
+      {
+        heading: "1. New Criminal Codes (2023–2024)",
+        content: "Full-text statutory index of the Bharatiya Nyaya Sanhita (BNS 2023), Bharatiya Nagarik Suraksha Sanhita (BNSS 2023), and Bharatiya Sakshya Adhiniyam (BSA 2023), complete with cross-walk comparison tables to IPC, CrPC, and IEA."
+      },
+      {
+        heading: "2. Constitutional & Foundational Codes",
+        content: "Complete text and judicial interpretation of the Constitution of India, Code of Civil Procedure (CPC 1908), Indian Contract Act 1872, Transfer of Property Act 1882, and Specific Relief Act."
+      },
+      {
+        heading: "3. Corporate & Regulatory Legislation",
+        content: "Indexed coverage of the Commercial Courts Act 2015, Arbitration and Conciliation Act 1996, Digital Personal Data Protection (DPDP) Act 2023, Insolvency and Bankruptcy Code (IBC 2016), and Negotiable Instruments Act (Section 138)."
+      }
+    ]
+  },
+  "bar-council-ethics": {
+    badge: "PROTOCOL § 103 · BAR COUNCIL ETHICS",
+    title: "Bar Council of India Ethics & Compliance Standard",
+    subtitle: "Strict Conformity with the Advocates Act, 1961 and Bar Council of India Rules",
+    sections: [
+      {
+        heading: "1. Rule 36 Compliance (Non-Solicitation)",
+        content: "Juris operates strictly as an internal research and drafting apparatus for enrolled advocates and in-house counsel. The platform does not advertise legal services, solicit clients, or provide direct consumer representation."
+      },
+      {
+        heading: "2. Advocate-Client Privilege (Section 126 / BSA S. 132)",
+        content: "Communications, uploaded briefs, and drafted petitions within Juris are treated as privileged work product under statutory professional secrecy standards. No uploaded data is exposed or transferred."
+      },
+      {
+        heading: "3. Augmenting Practitioner Judgment",
+        content: "Juris is an augmentative research tool. The final legal interpretation, filing strategy, and court representation remain exclusively the prerogative and responsibility of the practicing advocate."
+      }
+    ]
+  },
+  "terms-of-service": {
+    badge: "LEGAL § 201 · TERMS OF SERVICE",
+    title: "Practitioner Terms of Service & Software License",
+    subtitle: "Standard Software License Agreement for Legal Practitioners and Chambers",
+    sections: [
+      {
+        heading: "1. Scope of License",
+        content: "Juris grants users a revocable, non-exclusive license to access computational statutory research, document analysis, and drafting acceleration for professional legal preparation."
+      },
+      {
+        heading: "2. Practitioner Responsibility",
+        content: "All AI-generated summaries, clause inspections, and draft filings must be independently reviewed and verified by an advocate before submission to any court, tribunal, or arbitration panel."
+      },
+      {
+        heading: "3. Data Sovereignty & Portability",
+        content: "Chambers retain 100% intellectual property ownership of uploaded documents and derived briefs. You may export or permanently delete your vault dockets at any time."
+      }
+    ]
+  },
+  "privacy-protocol": {
+    badge: "LEGAL § 202 · PRIVACY PROTOCOL",
+    title: "Privacy Protocol & Vault Security Standard",
+    subtitle: "Enterprise-Grade Confidentiality and Fiduciary Data Protection",
+    sections: [
+      {
+        heading: "1. Zero Model Training on Client Briefs",
+        content: "We enforce a strict zero-retention policy for machine learning training. Your case briefs, contracts, and confidential party identities are NEVER used to train foundational AI models."
+      },
+      {
+        heading: "2. Cryptographic Security Standards",
+        content: "All documents and docket metadata are protected by AES-256 encryption at rest and TLS 1.3 encryption in transit, with dedicated tenant isolation."
+      },
+      {
+        heading: "3. Right to Complete Deletion",
+        content: "Deleting a matter from your workspace immediately and permanently destroys all associated vector embeddings and text chunks across our database."
+      }
+    ]
+  },
+  "statutory-disclaimer": {
+    badge: "LEGAL § 203 · STATUTORY DISCLAIMER",
+    title: "Statutory Disclaimer & Limitations",
+    subtitle: "Statutory Clarification Under the Advocates Act, 1961",
+    sections: [
+      {
+        heading: "1. Not Formal Legal Counsel",
+        content: "Juris is an automated computational intelligence software and does not constitute a law firm or a formal legal opinion under the Advocates Act, 1961. Use of Juris does not establish an attorney-client relationship."
+      },
+      {
+        heading: "2. Independent Judicial Discretion",
+        content: "Judicial decisions depend on evolving bench precedents, local court rules, and procedural nuances. Practitioners must exercise independent professional due diligence."
+      },
+      {
+        heading: "3. Limitation of Liability",
+        content: "Juris Systems shall not be liable for any court outcome, filing procedural defect, or litigation strategy derived from automated research outputs."
+      }
+    ]
+  }
+};
 
 const FEATURES = [
   { icon: "psychiatry", title: "Smart Legal Research", desc: "Stop scrolling through endless search results. Get direct, plain-English answers backed strictly by Indian case law and bare acts." },
@@ -23,6 +140,27 @@ const STATS = [
 ];
 
 export default function LandingPage({ onNavigate }) {
+  const [activeDocKey, setActiveDocKey] = useState(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setActiveDocKey(null);
+      }
+    };
+    if (activeDocKey) {
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "unset";
+    };
+  }, [activeDocKey]);
+
+  const activeDoc = activeDocKey ? PROTOCOL_DOCUMENTS[activeDocKey] : null;
   return (
     <div className="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex flex-col">
       {/* ── Navbar ──────────────────────────────────── */}
@@ -305,7 +443,10 @@ export default function LandingPage({ onNavigate }) {
                     <h3 className="font-headline-md text-xl text-primary font-bold mb-3">{f.title}</h3>
                     <p className="font-body-md text-sm text-on-surface-variant leading-relaxed">{f.desc}</p>
                   </div>
-                  <div className="mt-8 pt-4 border-t border-primary/20 flex justify-between items-center text-xs font-label-sm text-secondary uppercase tracking-wider group-hover:text-primary">
+                  <div 
+                    className="mt-8 pt-4 border-t border-primary/20 flex justify-between items-center text-xs font-label-sm text-secondary uppercase tracking-wider group-hover:text-primary cursor-pointer"
+                    onClick={() => setActiveDocKey("citation-accuracy")}
+                  >
                     <span>Verified Protocol</span>
                     <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                   </div>
@@ -418,15 +559,51 @@ export default function LandingPage({ onNavigate }) {
             </div>
             <div className="flex flex-col gap-3">
               <span className="text-primary font-bold border-b border-primary/30 pb-1 mb-1">Protocols</span>
-              <a href="#" className="text-secondary hover:text-primary transition-colors">Citation Accuracy</a>
-              <a href="#" className="text-secondary hover:text-primary transition-colors">Bare Acts Scope</a>
-              <a href="#" className="text-secondary hover:text-primary transition-colors">Bar Council Ethics</a>
+              <button 
+                type="button" 
+                onClick={() => setActiveDocKey("citation-accuracy")} 
+                className="text-left text-secondary hover:text-primary hover:underline transition-all cursor-pointer"
+              >
+                Citation Accuracy
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setActiveDocKey("bare-acts-scope")} 
+                className="text-left text-secondary hover:text-primary hover:underline transition-all cursor-pointer"
+              >
+                Bare Acts Scope
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setActiveDocKey("bar-council-ethics")} 
+                className="text-left text-secondary hover:text-primary hover:underline transition-all cursor-pointer"
+              >
+                Bar Council Ethics
+              </button>
             </div>
             <div className="flex flex-col gap-3">
               <span className="text-primary font-bold border-b border-primary/30 pb-1 mb-1">Legal</span>
-              <a href="#" className="text-secondary hover:text-primary transition-colors">Terms of Service</a>
-              <a href="#" className="text-secondary hover:text-primary transition-colors">Privacy Protocol</a>
-              <a href="#" className="text-secondary hover:text-primary transition-colors">Statutory Disclaimer</a>
+              <button 
+                type="button" 
+                onClick={() => setActiveDocKey("terms-of-service")} 
+                className="text-left text-secondary hover:text-primary hover:underline transition-all cursor-pointer"
+              >
+                Terms of Service
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setActiveDocKey("privacy-protocol")} 
+                className="text-left text-secondary hover:text-primary hover:underline transition-all cursor-pointer"
+              >
+                Privacy Protocol
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setActiveDocKey("statutory-disclaimer")} 
+                className="text-left text-secondary hover:text-primary hover:underline transition-all cursor-pointer"
+              >
+                Statutory Disclaimer
+              </button>
             </div>
           </div>
         </div>
@@ -436,6 +613,85 @@ export default function LandingPage({ onNavigate }) {
           <p className="text-[11px]">DISCLAIMER: Juris is a legal intelligence tool and does not constitute formal legal counsel under the Advocates Act, 1961.</p>
         </div>
       </footer>
+
+      {/* ── Gazette Protocol & Legal Modal Dialog ───────────────── */}
+      {activeDoc && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-primary/70 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() => setActiveDocKey(null)}
+        >
+          <div 
+            className="bg-surface border-2 border-primary max-w-2xl w-full max-h-[85vh] flex flex-col shadow-[8px_8px_0px_rgba(4,22,39,0.35)] relative overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Gazette Masthead Header */}
+            <div className="border-b-2 border-primary bg-parchment-deep p-5 flex items-start justify-between gap-4">
+              <div>
+                <div className="font-citation text-[11px] font-bold text-secondary uppercase tracking-wider mb-1 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-primary"></span>
+                  <span>{activeDoc.badge}</span>
+                </div>
+                <h3 className="font-display-lg text-2xl sm:text-3xl text-primary uppercase font-bold leading-tight">
+                  {activeDoc.title}
+                </h3>
+                <p className="font-body-md text-xs text-on-surface-variant italic mt-1">
+                  {activeDoc.subtitle}
+                </p>
+              </div>
+
+              <button 
+                type="button"
+                onClick={() => setActiveDocKey(null)}
+                className="p-1.5 border border-primary/40 bg-surface hover:bg-primary hover:text-on-primary text-primary transition-colors cursor-pointer shrink-0"
+                aria-label="Close modal"
+              >
+                <span className="material-symbols-outlined text-[20px] block">close</span>
+              </button>
+            </div>
+
+            {/* Modal Document Body */}
+            <div className="p-6 overflow-y-auto space-y-6 flex-1 bg-surface">
+              {activeDoc.sections.map((sec, idx) => (
+                <div key={idx} className="border-b border-primary/15 pb-4 last:border-b-0 last:pb-0">
+                  <h4 className="font-headline-md text-base text-primary font-bold mb-2">
+                    {sec.heading}
+                  </h4>
+                  <p className="font-body-md text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                    {sec.content}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Modal Footer Controls */}
+            <div className="border-t-2 border-primary bg-parchment-mid p-4 px-6 flex flex-wrap items-center justify-between gap-3">
+              <div className="font-citation text-[11px] text-secondary">
+                AUTHENTICATED DISPATCH · JURIS GAZZETTE
+              </div>
+              <div className="flex items-center gap-3">
+                <button 
+                  type="button"
+                  onClick={() => setActiveDocKey(null)}
+                  className="font-label-sm text-xs uppercase tracking-wider px-4 py-2 border border-primary/40 hover:bg-surface text-primary transition-colors cursor-pointer font-bold"
+                >
+                  DISMISS
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => {
+                    setActiveDocKey(null);
+                    onNavigate("register");
+                  }}
+                  className="bg-primary text-on-primary font-label-sm text-xs uppercase tracking-wider px-4 py-2 border border-primary hover:bg-surface hover:text-primary transition-colors cursor-pointer font-bold flex items-center gap-1.5"
+                >
+                  ENROL NOW
+                  <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
