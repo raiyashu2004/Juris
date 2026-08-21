@@ -15,12 +15,6 @@ const STEPS = [
   { num: "03", title: "Build your case", desc: "Get actionable insights, highlighted risk clauses, and exactly formatted citations to drop straight into your petition." },
 ];
 
-const TESTIMONIALS = [
-  { name: "Adv. Priya Sharma", role: "Delhi High Court", text: "Manually reviewing a 50-page commercial lease used to eat up my entire weekend. Now I just run it through the analyzer to catch the worst clauses, giving me a massive head start." },
-  { name: "Rajesh Iyer", role: "Corporate Counsel, Mumbai", text: "Finding the exact legal precedent for an obscure property dispute is usually a nightmare. This actually understands the context of what I'm looking for and pulls up directly applicable SC judgments." },
-  { name: "Adv. Meera Patel", role: "Criminal Defense, Gujarat", text: "I was extremely skeptical about an AI making up fake cases. But the fact that it strictly limits itself to verified bare acts is a huge relief. It saves me hours on initial bail drafts." },
-];
-
 const STATS = [
   { value: "100+", label: "Legal Professionals" },
   { value: "10k+", label: "Judgments Indexed" },
@@ -49,7 +43,6 @@ export default function LandingPage({ onNavigate }) {
           <div className="hidden md:flex items-center gap-8 lg:gap-10 font-label-sm text-xs uppercase tracking-widest text-secondary font-medium">
             <a href="#features" className="hover:text-primary transition-colors py-1">Features</a>
             <a href="#how-it-works" className="hover:text-primary transition-colors py-1">How It Works</a>
-            <a href="#testimonials" className="hover:text-primary transition-colors py-1">Testimonials</a>
           </div>
 
           <div className="flex items-center gap-3 sm:gap-4">
@@ -363,45 +356,6 @@ export default function LandingPage({ onNavigate }) {
           </div>
         </section>
 
-        {/* ── Testimonials / Counsel Affidavits ──────────────── */}
-        <section id="testimonials" className="border-b-2 border-primary bg-surface py-20 px-4 md:px-margin">
-          <div className="max-w-[1400px] mx-auto">
-            <div className="border-b-2 border-primary pb-6 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div>
-                <div className="font-label-sm text-xs text-secondary uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary"></span>
-                  <span>SECTION V · COUNSEL OBSERVATIONS</span>
-                </div>
-                <h2 className="font-display-lg text-[36px] md:text-[48px] text-primary uppercase">
-                  Practitioner Testimonials
-                </h2>
-              </div>
-              <p className="font-body-md text-sm text-secondary max-w-md">
-                Verified feedback from advocates practicing across High Courts and corporate chambers.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-2 border-primary bg-surface divide-y-2 md:divide-y-0 md:divide-x-2 divide-primary">
-              {TESTIMONIALS.map((t, i) => (
-                <div key={i} className="p-8 md:p-10 bg-surface flex flex-col justify-between hover:bg-parchment-mid transition-colors">
-                  <div>
-                    <div className="font-citation text-xs text-secondary mb-4 flex items-center justify-between border-b border-primary/20 pb-2">
-                      <span>AFFIDAVIT NO. {i + 101}</span>
-                      <span className="text-primary font-bold">VERIFIED</span>
-                    </div>
-                    <p className="font-body-md text-sm text-on-surface leading-relaxed italic mb-8">
-                      "{t.text}"
-                    </p>
-                  </div>
-                  <div className="border-t-2 border-primary pt-4 bg-parchment-deep p-4 border border-primary/20">
-                    <div className="font-headline-md text-base font-bold text-primary">{t.name}</div>
-                    <div className="font-label-sm text-xs text-secondary uppercase tracking-wider mt-0.5">{t.role}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* ── Institutional Enrolment CTA ────────────────────── */}
         <section className="bg-primary text-on-primary py-20 px-4 md:px-margin text-center relative overflow-hidden border-b-2 border-primary">
@@ -461,7 +415,6 @@ export default function LandingPage({ onNavigate }) {
               <span className="text-primary font-bold border-b border-primary/30 pb-1 mb-1">Sections</span>
               <a href="#features" className="text-secondary hover:text-primary transition-colors">Apparatus (§ III)</a>
               <a href="#how-it-works" className="text-secondary hover:text-primary transition-colors">Sequence (§ IV)</a>
-              <a href="#testimonials" className="text-secondary hover:text-primary transition-colors">Affidavits (§ V)</a>
             </div>
             <div className="flex flex-col gap-3">
               <span className="text-primary font-bold border-b border-primary/30 pb-1 mb-1">Protocols</span>
