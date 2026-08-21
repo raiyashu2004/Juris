@@ -96,8 +96,8 @@ Juris is engineered for **high concurrency (50+ simultaneous active sessions)** 
 
 | Layer | Technologies |
 | :--- | :--- |
-| **Frontend** | React 18, Vite, Tailwind CSS, Material Symbols, JetBrains Mono & Bodoni Moda Typography |
-| **Backend** | Python 3.11+, FastAPI, Uvicorn, Gunicorn, LangChain |
+| **Frontend** | React 18, Vite, Tailwind CSS, Material Symbols, Lora (Serif) & Plus Jakarta Sans / Inter / JetBrains Mono |
+| **Backend** | Python 3.11+, FastAPI, Uvicorn, LangChain |
 | **AI / LLM** | Google Gemini (`gemini-3.1-flash-lite`), LangChain Google GenAI |
 | **Vector DB** | PostgreSQL (`pgvector`), AsyncPG Connection Pool (10–60 connections) |
 | **Document Processing** | PyMuPDF (fitz), Python-Docx, Async I/O Threadpool |
@@ -130,7 +130,7 @@ JWT_SECRET=your_secure_random_jwt_secret
 
 Launch FastAPI server:
 ```bash
-uvicorn main:app --reload --port 10000 --workers 4
+uvicorn main:app --reload --port 10000
 ```
 
 ### 3. Frontend Setup
