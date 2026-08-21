@@ -76,14 +76,17 @@ export default {
         "rule-heavy": "2px"
       },
       fontFamily: {
-        "headline-lg-mobile": ["Bodoni Moda", "serif"],
+        sans: ["Plus Jakarta Sans", "Inter", "system-ui", "sans-serif"],
+        serif: ["Lora", "Georgia", "serif"],
+        mono: ["JetBrains Mono", "monospace"],
+        "headline-lg-mobile": ["Lora", "Georgia", "serif"],
         "citation": ["JetBrains Mono", "monospace"],
-        "body-lg": ["Hanken Grotesk", "sans-serif"],
-        "display-lg": ["Bodoni Moda", "serif"],
-        "body-md": ["Hanken Grotesk", "sans-serif"],
-        "headline-lg": ["Bodoni Moda", "serif"],
-        "headline-md": ["Bodoni Moda", "serif"],
-        "label-sm": ["JetBrains Mono", "monospace"]
+        "body-lg": ["Plus Jakarta Sans", "Inter", "system-ui", "sans-serif"],
+        "display-lg": ["Lora", "Georgia", "serif"],
+        "body-md": ["Plus Jakarta Sans", "Inter", "system-ui", "sans-serif"],
+        "headline-lg": ["Lora", "Georgia", "serif"],
+        "headline-md": ["Lora", "Georgia", "serif"],
+        "label-sm": ["Plus Jakarta Sans", "Inter", "sans-serif"]
       },
       fontSize: {
         "headline-lg-mobile": ["24px", { lineHeight: "1.2", fontWeight: "600" }],
